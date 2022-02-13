@@ -1,0 +1,33 @@
+{% extends "polls/base.html" %}
+{% block base %}
+    <h3>{{ question.question_text }}</h3>
+
+    <form class="navbar-form navbar-left" action="{% url 'polls:vote' question.id %}" method="post" >
+      {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      <div class="form-group">
+        {% for choice in question.choice_set.all %}
+            <input type="radio" name="choice" value="{{ choice.id }}">
+            <label>{{ choice.choice_text }}</label><br>
+        {% endfor %}
+      </div>
+        <br>
+      <button type="submit" class="btn btn-primary">Vote</button>
+        {% csrf_token %}
+    </form>
+
+    <!-- 首页详情-->
+<!--    <form action="{% url 'polls:vote' question.id %}" method="post">-->
+<!--        {% csrf_token %}-->
+<!--        <fieldset>-->
+<!--            <legend><h1>{{ question.question_text }}</h1></legend>-->
+<!--            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}-->
+<!--            {% for choice in question.choice_set.all %}-->
+<!--                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">-->
+<!--                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>-->
+<!--            {% endfor %}-->
+<!--        </fieldset>-->
+<!--        <input type="submit" value="Vote">-->
+<!--    </form>-->
+
+{% endblock %}
+

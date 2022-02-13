@@ -1,0 +1,21 @@
+{% extends "polls/base.html" %}
+{% block base %}
+
+    <!-- 投票结果-->
+    <h3>{{ question.question_text }}</h3>
+    <ul>
+    {% for choice in question.choice_set.all %}
+        <li>
+            <div> {{ choice.choice_text }} </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{ choice.votes }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ choice.votes }}%;">
+                    <span class="sr-only">60% Complete</span>
+                </div>
+                {{ choice.votes }}
+            </div>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+
+{% endblock %}

@@ -3,26 +3,38 @@ from django.http import HttpResponse, HttpResponseRedirect
 from polls.models import Question, Choice
 from django.http import Http404
 from django.urls import reverse
-from django.views import generic
 
 
-class IndexView(generic.ListView):
-    template_name = 'polls/index.html'
-    context_object_name = 'question_list'
-
-    def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
-
-
-class DetailView(generic.DetailView):
-    model = Question
-    template_name = 'polls/detail.html'
+def index(request):
+    """问题列表"""
+    print("aaaa")
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    context = {'question_list': latest_question_list}
+    return render(request, "polls/index.html", context)
 
 
-class ResultsView(generic.DetailView):
-    model = Question
-    template_name = 'polls/results.html'
+def detail(request, question_id):
+    """问题的详情页面"""
+    print("问题的id", question_id)
+    q = get_object_or_404(Question, pk=question_id)
+    # try:
+    #     q = Question.objects.get(id=question_id)
+    # except Question.DoesNotExist:
+    #     raise Http404("问题id不存在")
+    # print(q.question_text)
+
+    # c1 = Choice.objects.filter(question=q)
+    # c2 = Choice.objects.filter(question_id=q.id)
+    # for c in c2:
+    #     print(c.choice_text)
+
+    return render(request, 'polls/detail.html', {'question': q})
+
+
+def results(request, question_id):
+    """投票的结果页面"""
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html', {'question': question})
 
 
 def vote(request, question_id):

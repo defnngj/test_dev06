@@ -1,72 +1,36 @@
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/favicon.ico">
-    <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/starter-template/">
-
-    <title>Starter Template for Bootstrap</title>
-    <!-- Bootstrap core CSS -->
-    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/examples/starter-template/starter-template.css" rel="stylesheet">
-
-
-  </head>
-
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">django官方例子</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">问题列表</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-    <div class="container">
-
-      <div class="starter-template">
-          {% if question_list %}
-            <ul>
+{% extends "polls/base.html" %}
+{% block base %}
+    <div class="col-md-6">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>问题</th>
+              <th>创建时间</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for question in question_list %}
-              <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+            <tr>
+              <td>{{ question.id }}</td>
+              <td>
+                <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }} </a>
+              </td>
+              <td>{{question.pub_date | date:"Y-m-d H:i:s" }}</td>
+            </tr>
             {% endfor %}
-            </ul>
-        {% else %}
-            <p>No polls are available.</p>
-        {% endif %}
+          </tbody>
+        </table>
       </div>
+    <!-- 首页问题列表-->
+<!--    {% if question_list %}-->
+<!--        <ul>-->
+<!--        {% for question in question_list %}-->
+<!--          <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }} - {{question.pub_date | date:"Y-m-d H:i:s" }}</a></li>-->
+<!--        {% endfor %}-->
+<!--        </ul>-->
+<!--    {% else %}-->
+<!--        <p>No polls are available.</p>-->
+<!--    {% endif %}-->
 
-    </div><!-- /.container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://fastly.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.30/assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+{% endblock %}
