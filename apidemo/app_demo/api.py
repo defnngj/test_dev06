@@ -1,12 +1,15 @@
 import os
 import datetime
-from ninja import NinjaAPI, Form, File
+from ninja import Router, Form, File
 from ninja.files import UploadedFile
 from ninja import Schema, Path, Query
 from typing import List
 from pydantic import Field
+from django.contrib.auth.models import User
+from app_demo.models import Task
 
-api = NinjaAPI()
+
+api = Router(tags=["app_demo"])
 
 
 @api.get("/add")
@@ -103,6 +106,7 @@ def login(request, username: str = Form(...), password: str = Form(...)):
 
 file_type = ["png", "jpg", "jpeg", "txt"]
 
+
 @api.post("/upload")
 def upload(request, file: UploadedFile = File(...)):
     """
@@ -117,7 +121,7 @@ def upload(request, file: UploadedFile = File(...)):
     if suffix not in file_type:
         print("不支持该文件类型的上传")
 
-    print(file.size) # 10Mb = 10 * 1024 * 1024
+    print(file.size)  # 10Mb = 10 * 1024 * 1024
     f_size = file.size
     if f_size > 100:
         print("不支持大于100b文件的上传")
@@ -134,6 +138,75 @@ def upload(request, file: UploadedFile = File(...)):
     local_file.close()
 
     return {'name': file.name, 'len': len(data)}
+
+
+class UserIn(Schema):
+    username: str
+    password: str
+    email: str
+
+
+class UserOut(Schema):
+    id: int
+    username: str
+    email: str
+
+
+@api.post("/users/", response=UserOut)
+def create_user(request, data: UserIn):
+    user = User(username=data.username)
+    user.set_password(data.password)
+    user.email = data.email
+    user.save()
+    return user
+
+
+class UserSchema(Schema):
+    id: int
+    username: str
+    email: str
+    first_name: str
+    last_name: str
+
+
+class TaskSchema(Schema):
+    id: int
+    title: str
+    is_completed: bool
+    owner: UserSchema = None  # ! None - to mark it as optional
+    completed: bool = Field(..., alias="is_completed")
+    owner_admin_user: str = Field(None, alias="owner.username")
+
+    @staticmethod
+    def resolve_owner(obj):
+        if not obj.owner:
+            return
+        return f"{obj.owner.first_name} {obj.owner.last_name}"
+
+@api.get("/tasks", response=List[TaskSchema])
+def tasks(request):
+    return Task.objects.all()
+
+
+
+class Token(Schema):
+    token: str
+
+class Message(Schema):
+    message: str
+
+class Auth(Schema):
+    token: str
+
+@api.post('/login2', response={200: Token, 401: Message, 402: Message})
+def login2(request, payload: Auth):
+    print(payload.token, type(payload.token))
+    if payload.token == "1":
+        return 401, {'message': 'Unauthorized'}
+    if payload.token == "2":
+        return 402, {'message': 'Insufficient balance amount. Please proceed to a payment page.'}
+    return 200, {'token': payload.token}
+
 
 
 
