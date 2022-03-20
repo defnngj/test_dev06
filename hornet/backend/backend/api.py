@@ -1,12 +1,20 @@
+from datetime import datetime
 from ninja import NinjaAPI
 from ninja.security import HttpBearer
 from users.api import router as users_router
+from projects.api import router as projects_router
 from ninja.security import django_auth
 from django.contrib.sessions.models import Session
+from backend.settings import SESSION_COOKIE_AGE
 
 
 class InvalidToken(Exception):
     """无效的token"""
+    pass
+
+
+class OverdueToken(Exception):
+    """过期的token"""
     pass
 
 
@@ -16,7 +24,13 @@ class GlobalAuth(HttpBearer):
         自动定义认证token处理
         """
         try:
-            Session.objects.get(pk=token)
+           session = Session.objects.get(pk=token)
+           print("--->", type(session))
+           # # 有效时间
+           # SESSION_COOKIE_AGE
+           # # 当前时间
+           # datetime
+           # # token/session 创建时间 2022-1-1：12：00：00
         except Session.DoesNotExist:
             raise InvalidToken
         else:
@@ -32,7 +46,17 @@ def on_invalid_token(request, exc):
     return api.create_response(request, {"detail": "Invalid token supplied"}, status=401)
 
 
-# tags users  URI: api/user/xxx
+@api.exception_handler(OverdueToken)
+def on_overdue_token(request, exc):
+    """过期token返回类型 """
+    return api.create_response(request, {"detail": "Overdue token supplied"}, status=401)
+
+
+# tags users  URI: api/users/xxx
 api.add_router("/users/", users_router)
+# tags projects  URI: api/projects/xxx
+api.add_router("/projects/", projects_router)
+
+
 
 

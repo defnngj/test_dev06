@@ -46,8 +46,8 @@ def user_login(request, payload: LoginIn):
     password1 = payload.password
     user = auth.authenticate(username=username1, password=password1)
     if user is not None:
-        auth.login(request, user)
-        token = Session.objects.last()
+        auth.login(request, user)  # 会向session表创建一条数据
+        token = Session.objects.last()  # last 最新的
         user_info = {
             "id": user.id,
             "username": user.username,
@@ -61,6 +61,7 @@ def user_login(request, payload: LoginIn):
 @router.get("/bearer")
 def bearer(request):
     """
+    假设，必须要登录之后才能访问
     测试：获取token
     """
     return {"token": request.auth}

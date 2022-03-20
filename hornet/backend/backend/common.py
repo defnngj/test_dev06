@@ -9,11 +9,19 @@ class Error:
     PAWD_ERROR = {"10012": "两次密码不一致"}
     USER_EXIST = {"10013": "用户已被注册"}
 
+    PROJECT_NAME_EXIST = {"10021": "项目名称已存在"}
+    PROJECT_NOT_EXIST = {"10022": "项目不存在"}
+    PROJECT_IS_DELETE = {"10023": "项目已被删除"}
+
+    FILE_TYPE_ERROR = {"10031": "文件类型错误"}
+    FILE_SIZE_ERROR = {"10032": "超出文件大小"}
+
 
 def response(success: bool = True, error=None, result=[]) -> dict:
     """
     定义统一返回格式
     """
+    print("error", error)
     if error is None:
         error_code = ""
         error_msg = ""
