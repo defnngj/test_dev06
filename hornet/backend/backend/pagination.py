@@ -18,22 +18,26 @@ class CustomPagination(PaginationBase):
     """
     class Input(Schema):
         page: int = Field(1, gt=0)
+        size: int = 6
 
-    def __init__(self, page_size: int = settings.PAGINATION_PER_PAGE) -> None:
-        self.page_size = page_size
+    class Output(Schema):
+        success: bool = True
+        code: dict = {"code": "", "msg": ""}
+        total: int
+        page: int
+        size: int
 
-    def paginate_queryset(
-        self, items: QuerySet, request: HttpRequest, **params: DictStrAny
-    ) -> QuerySet:
-        page: int = params["pagination"].page  # type: ignore
-        offset = (page - 1) * self.page_size
+    def paginate_queryset(self, queryset: QuerySet, pagination: Input, **params):
+        page: int = pagination.page
+        size: int = pagination.size
+        offset = (page - 1) * size
         data = {
-            "items": items[offset: offset + self.page_size],
+            "items": queryset[offset: offset + size],
+            "total": len(queryset),
             "page": page,
-            "size": self.page_size,
-            "total": len(items),
+            "size": size
         }
-        return response(result=data)
+        return data
 
 
 

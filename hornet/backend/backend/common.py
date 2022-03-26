@@ -17,7 +17,7 @@ class Error:
     FILE_SIZE_ERROR = {"10032": "超出文件大小"}
 
 
-def response(success: bool = True, error=None, result=[]) -> dict:
+def response(success: bool = True, error=None, item=None) -> dict:
     """
     定义统一返回格式
     """
@@ -30,15 +30,18 @@ def response(success: bool = True, error=None, result=[]) -> dict:
         error_code = list(error.keys())[0]
         error_msg = list(error.values())[0]
 
-    resp_dict = {
+    if item is None:
+        item = {}
+
+    resp_data = {
         "success": success,
         "error": {
             "code": error_code,
             "msg": error_msg
         },
-        "result": result
+        "item": item
     }
-    return resp_dict
+    return resp_data
 
 
 
