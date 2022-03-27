@@ -16,6 +16,10 @@ class Error:
     FILE_TYPE_ERROR = {"10031": "文件类型错误"}
     FILE_SIZE_ERROR = {"10032": "超出文件大小"}
 
+    MODULE_NAME_EXIST = {"10041": "模块名称已存在"}
+    MODULE_NOT_EXIST = {"10042": "模块不存在"}
+    MODULE_IS_DELETE = {"10043": "模块已被删除"}
+
 
 def response(success: bool = True, error=None, item=None) -> dict:
     """

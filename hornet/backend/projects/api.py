@@ -95,7 +95,7 @@ def project_image_upload(request, file: UploadedFile = File(...)):
     """
     # 判断文件后缀名
     suffix = file.name.split(".")[-1]
-    if suffix not in ["png", "jpg", "jpeg"]:
+    if suffix not in ["png", "jpg", "jpeg", "gif"]:
         return response(error=Error.FILE_TYPE_ERROR)
 
     # 判断文件大小 1024 * 1024 * 2 = 2MB

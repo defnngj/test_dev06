@@ -3,6 +3,7 @@ from ninja import NinjaAPI
 from ninja.security import HttpBearer
 from users.api import router as users_router
 from projects.api import router as projects_router
+from cases.api import router as cases_router
 from ninja.security import django_auth
 from django.contrib.sessions.models import Session
 from backend.settings import SESSION_COOKIE_AGE
@@ -56,6 +57,23 @@ def on_overdue_token(request, exc):
 api.add_router("/users/", users_router)
 # tags projects  URI: api/projects/xxx
 api.add_router("/projects/", projects_router)
+# tags cases  URI: api/cases/xxx
+api.add_router("/cases/", cases_router)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
