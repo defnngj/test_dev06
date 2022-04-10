@@ -1,31 +1,24 @@
-import os
-import hashlib
-from ninja import File
-from ninja.files import UploadedFile
+from typing import List
 from ninja import Router
-from ninja import Schema, Path, Query
+from ninja import Query
+from ninja.pagination import paginate
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
-from typing import List
-from ninja.pagination import paginate, LimitOffsetPagination, PageNumberPagination
 from backend.common import response, Error
-from backend.pagination import CustomPagination
-from backend.settings import IMAGE_DIR
 from projects.models import Project
-from cases.models import Module
-from cases.api_schema import ModuleIn, ProjectIn
+from cases.models import Module, TestCase
+from cases.apis.api_schema import ModuleIn, ProjectIn, CaseOut
+from backend.pagination import CustomPagination
+
+router = Router(tags=["module"])
 
 
-router = Router(tags=["cases"])
-
-
-@router.post("/module/", auth=None)
+@router.post("/", auth=None)
 def create_module(request, data: ModuleIn):
     """
     创建项目
     auth=None 该接口不需要认证
     """
-    print("data", data)
     project = Project.objects.filter(id=data.project_id)
     if len(project) == 0:
         return response(error=Error.PROJECT_NOT_EXIST)
@@ -39,7 +32,7 @@ def create_module(request, data: ModuleIn):
     return response(item=model_to_dict(module))
 
 
-@router.delete("/module/{module_id}/", auth=None)
+@router.delete("/{module_id}/", auth=None)
 def module_delete(request, module_id: int):
     """
     模块删除
@@ -75,7 +68,7 @@ def child_node(nodes, current_node):
     return False
 
 
-@router.get("/module/tree", auth=None)
+@router.get("/tree", auth=None)
 def get_module_tree(request, filters: ProjectIn = Query(...)):
     """
     获取模块树
@@ -107,6 +100,15 @@ def get_module_tree(request, filters: ProjectIn = Query(...)):
 
     return response(item=data)
 
+
+@router.get("/{module_id}/cases", auth=None, response=List[CaseOut])
+@paginate(CustomPagination)
+def case_list(request, module_id: int, **kwargs):
+    """
+    获取模块下面的用例列表
+    auth=None 该接口不需要认证
+    """
+    return TestCase.objects.filter(module_id=module_id, is_delete=False).all()
 
 
 

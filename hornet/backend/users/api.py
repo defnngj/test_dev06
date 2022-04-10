@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.sessions.models import Session
 from users.api_schema import RegisterIn, LoginIn
+from ninja import Schema
 
 router = Router(tags=["users"])
 
@@ -34,6 +35,11 @@ def user_register(request, data: RegisterIn):
         "username": user.username
     }
     return response(result=user_info)
+
+
+class LoginIn(Schema):
+    username: str
+    password: str
 
 
 @router.post("/login", auth=None)

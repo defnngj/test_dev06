@@ -1,3 +1,4 @@
+from projects.models import Project
 from ninja import Schema
 from typing import List, Any
 

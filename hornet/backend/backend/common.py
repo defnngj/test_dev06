@@ -1,3 +1,5 @@
+from itertools import chain
+
 
 class Error:
     """
@@ -20,6 +22,23 @@ class Error:
     MODULE_NOT_EXIST = {"10042": "模块不存在"}
     MODULE_IS_DELETE = {"10043": "模块已被删除"}
 
+    CASE_METHOD_ERROR = {"10051": "请求方法错误"}
+    CASE_HEADER_ERROR = {"10052": "请求header错误"}
+    CASE_PARAMS_ERROR = {"10053": "请求参数类型错误"}
+    CASE_ASSERT_ERROR = {"10054": "断言类型错误"}
+    CASE_DELETE_ERROR = {"10055": "用例已被删除"}
+
+
+def model_to_dict(instance: object) -> dict:
+    """
+    对象转字典
+    """
+    opts = instance._meta
+    data = {}
+    for f in chain(opts.concrete_fields, opts.private_fields, opts.many_to_many):
+        data[f.name] = f.value_from_object(instance)
+    return data
+
 
 def response(success: bool = True, error=None, item=None) -> dict:
     """
@@ -36,6 +55,9 @@ def response(success: bool = True, error=None, item=None) -> dict:
 
     if item is None:
         item = {}
+
+    if isinstance(item, object):
+        item = model_to_dict(item)
 
     resp_data = {
         "success": success,
