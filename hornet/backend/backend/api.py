@@ -1,10 +1,11 @@
 from ninja import NinjaAPI
 from ninja.security import HttpBearer
+from django.contrib.sessions.models import Session
 from users.api import router as users_router
 from projects.api import router as projects_router
 from cases.apis.module_api import router as modules_router
 from cases.apis.case_api import router as cases_router
-from django.contrib.sessions.models import Session
+from tasks.api import router as tasks_router
 
 
 class InvalidToken(Exception):
@@ -58,6 +59,7 @@ api.add_router("/projects/", projects_router)
 # tags cases  URI: api/cases/xxx
 api.add_router("/modules/", modules_router)
 api.add_router("/cases/", cases_router)
+api.add_router("/tasks/", tasks_router)
 
 
 

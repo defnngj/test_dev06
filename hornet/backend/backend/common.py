@@ -55,8 +55,9 @@ def response(success: bool = True, error=None, item=None) -> dict:
 
     if item is None:
         item = {}
-
-    if isinstance(item, object):
+    elif isinstance(item, dict):
+        item = item
+    elif isinstance(item, object):
         item = model_to_dict(item)
 
     resp_data = {
