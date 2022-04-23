@@ -5,7 +5,8 @@ from users.api import router as users_router
 from projects.api import router as projects_router
 from cases.apis.module_api import router as modules_router
 from cases.apis.case_api import router as cases_router
-from tasks.api import router as tasks_router
+from tasks.apis.task_api import router as tasks_router
+from tasks.apis.report_api import router as reports_router
 
 
 class InvalidToken(Exception):
@@ -54,12 +55,21 @@ def on_overdue_token(request, exc):
 
 # tags users  URI: api/users/xxx
 api.add_router("/users/", users_router)
+
 # tags projects  URI: api/projects/xxx
 api.add_router("/projects/", projects_router)
-# tags cases  URI: api/cases/xxx
+
+# tags cases  URI: api/modules/xxx
 api.add_router("/modules/", modules_router)
+
+# tags cases  URI: api/cases/xxx
 api.add_router("/cases/", cases_router)
+
+# tags cases  URI: api/tasks/xxx
 api.add_router("/tasks/", tasks_router)
+
+# tags cases  URI: api/reports/xxx
+api.add_router("/reports/", reports_router)
 
 
 

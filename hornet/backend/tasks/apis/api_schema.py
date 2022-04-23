@@ -11,10 +11,14 @@ class TaskIn(Schema):
     cases: list
 
 
-# class ProjectOut(Schema):
-#     """项目出参"""
-#     id: int
-#     name: str
-#     describe: str
-#     image: str
-#     create_time: Any
+class ResultOut(Schema):
+    """测试报告返回"""
+    name: str
+    passed: int
+    error: int
+    failure: int
+    skipped: int
+    tests: int
+    run_time: float
+    result: str
+    create_time: Any

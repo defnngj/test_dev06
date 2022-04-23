@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-	<testsuite name="MyTest-20220417171308" tests="2" file=".py" time="1.989" timestamp="2022-04-17T17:13:10" failures="0" errors="0" skipped="0">
-		<testcase classname="MyTest" name="test_api_00001_test_case1" time="0.539" timestamp="2022-04-17T17:13:09" file="tasks\task_running\test_case.py" line="15">
+	<testsuite name="MyTest-20220423150033" tests="2" file=".py" time="1.970" timestamp="2022-04-23T15:00:35" failures="0" errors="0" skipped="0">
+		<testcase classname="MyTest" name="test_api_00001_test_case1" time="1.505" timestamp="2022-04-23T15:00:34" file="tasks\task_running\test_case.py" line="15">
 			<!--test_api_00001_test_case1-->
 		</testcase>
-		<testcase classname="MyTest" name="test_api_00002_test_case2" time="1.450" timestamp="2022-04-17T17:13:10" file="tasks\task_running\test_case.py" line="15">
+		<testcase classname="MyTest" name="test_api_00002_test_case2" time="0.465" timestamp="2022-04-23T15:00:35" file="tasks\task_running\test_case.py" line="15">
 			<!--test_api_00002_test_case2-->
 		</testcase>
 	</testsuite>

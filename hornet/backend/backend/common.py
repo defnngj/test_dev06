@@ -27,6 +27,9 @@ class Error:
     CASE_PARAMS_ERROR = {"10053": "请求参数类型错误"}
     CASE_ASSERT_ERROR = {"10054": "断言类型错误"}
     CASE_DELETE_ERROR = {"10055": "用例已被删除"}
+    CASE_NOT_EXIST = {"10056": "用例不存在"}
+
+    TASK_DELETE_ERROR = {"10061": "任务已被删除"}
 
 
 def model_to_dict(instance: object) -> dict:
@@ -44,7 +47,6 @@ def response(success: bool = True, error=None, item=None) -> dict:
     """
     定义统一返回格式
     """
-    print("error", error)
     if error is None:
         error_code = ""
         error_msg = ""

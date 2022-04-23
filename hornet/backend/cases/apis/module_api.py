@@ -9,7 +9,7 @@ from projects.models import Project
 from cases.models import Module, TestCase
 from cases.apis.api_schema import ModuleIn, ProjectIn, CaseOut
 from backend.pagination import CustomPagination
-
+from ninja.pagination import paginate
 router = Router(tags=["module"])
 
 
