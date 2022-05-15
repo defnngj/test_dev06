@@ -1,72 +1,72 @@
 <template>
   <div class="home">
-    <h1>这是一个登录页面</h1>
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <div style="text-align: center; margin: 0 auto">
-      <el-card class="box-card">
-        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="登录" name="first">
-            <el-form
-              :model="loginForm"
-              :rules="rules"
-              ref="loginForm"
-              label-position="left"
-              label-width="100px"
-            >
-              <el-form-item label="用户" prop="username">
-                <el-input v-model="loginForm.username"></el-input>
-              </el-form-item>
-              <el-form-item label="密码" prop="password">
-                <el-input
-                  v-model="loginForm.password"
-                  type="password"
-                ></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  type="primary"
-                  @click="submitLogin('loginForm')"
-                  style="width: 340px"
-                  >登录</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="注册" name="second">
-            <el-form
-              :model="registerForm"
-              :rules="rules"
-              ref="registerForm"
-              label-position="left"
-              label-width="100px"
-            >
-              <el-form-item label="用户" prop="username">
-                <el-input v-model="registerForm.username"></el-input>
-              </el-form-item>
-              <el-form-item label="设置密码" prop="password">
-                <el-input
-                  v-model="registerForm.password"
-                  type="password"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="确认密码" prop="confirm_password">
-                <el-input
-                  v-model="registerForm.confirm_password"
-                  type="password"
-                ></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  type="primary"
-                  @click="submitRegister('registerForm')"
-                  style="width: 340px"
-                  >注册</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </el-card>
+    <div class="main-window">
+      <div class="main-desc">
+        <h2>接口测试平台</h2>
+        <p>用于教学，包含项目管理、模块用例管理、任务执行、测试报告等功能</p>
+      </div>
+      <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" class="login-window">
+        <el-tab-pane label="登录" name="first">
+          <el-form
+            :model="loginForm"
+            :rules="rules"
+            ref="loginForm"
+            label-position="left"
+            label-width="100px"
+          >
+            <el-form-item label="用户" prop="username">
+              <el-input v-model="loginForm.username"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input
+                v-model="loginForm.password"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                @click="submitLogin('loginForm')"
+                style="width: 270px"
+                >登录</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="注册" name="second">
+          <el-form
+            :model="registerForm"
+            :rules="rules"
+            ref="registerForm"
+            label-position="left"
+            label-width="100px"
+          >
+            <el-form-item label="用户" prop="username">
+              <el-input v-model="registerForm.username"></el-input>
+            </el-form-item>
+            <el-form-item label="设置密码" prop="password">
+              <el-input
+                v-model="registerForm.password"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="confirm_password">
+              <el-input
+                v-model="registerForm.confirm_password"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="success"
+                @click="submitRegister('registerForm')"
+                style="width: 270px"
+                >注册</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -151,7 +151,18 @@ export default {
 </script>
 
 <style>
-.box-card {
-  width: 480px;
+.main-window {
+  text-align: center;
+  margin: 0 auto;
+  width: 800px;
+   margin-top: 200px;
+}
+.main-desc {
+  width: 350px;
+  float: left;
+}
+.login-window {
+  width: 400px;
+  float: right;
 }
 </style>
