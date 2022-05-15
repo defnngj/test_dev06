@@ -1,8 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+// import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Navigation from "../views/Navigation.vue";
+import Project from "../components/project/projectList.vue";
 
 Vue.use(VueRouter);
 
@@ -22,10 +23,8 @@ const routes = [
     component: Navigation,
     children: [
       {
-        // 当 /main/home 匹配成功，
-        // project 会被渲染在 Navigation 的 <router-view> 中
-        path: "home",
-        component: Home,
+        path: "project",
+        component: Project,
       },
       {
         path: "about",
@@ -41,7 +40,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   routes,
 });
