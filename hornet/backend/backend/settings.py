@@ -127,4 +127,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-IMAGE_DIR = os.path.join(BASE_DIR, "resources", "images")
+# 项目上传文件
+IMAGE_DIR = os.path.join(BASE_DIR, "static", "images")
+
+
+# 设置静态目录
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]

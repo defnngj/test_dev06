@@ -27,6 +27,8 @@ def create_project(request, data: ProjectIn):
     if len(project) > 0:
         return response(error=Error.PROJECT_NAME_EXIST)
 
+    if data.image == "":
+        data.image = "default_project_image.png"
     Project.objects.create(**data.dict())
     return response()
 
@@ -113,9 +115,3 @@ def project_image_upload(request, file: UploadedFile = File(...)):
             f.write(chunk)
 
     return response(item={"name": file_name})
-
-
-
-
-
-

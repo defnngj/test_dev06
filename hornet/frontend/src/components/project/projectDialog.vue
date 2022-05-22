@@ -18,22 +18,23 @@
       <el-form-item label="描述" prop="desc">
         <el-input type="textarea" v-model="projectForm.describe"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="图片" prop="desc">
-        <el-upload
-          class="upload-demo"
-          :before-upload="beforeUpload"
-          :action="updateURL"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          list-type="picture"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">
-            只能上传jpg/png文件，且不超过500kb
-          </div>
-        </el-upload>
-      </el-form-item> -->
+      <el-form-item label="图片" prop="desc">
+        <div id="image">
+          <el-upload
+            action="#"
+            :before-upload="beforeUpload"
+            list-type="picture-card"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="imageVisible">
+            <img width="100%" :src="imageUrl" alt="" />
+          </el-dialog>
+        </div>
+      </el-form-item>
       <el-form-item style="text-align: right">
         <el-button @click="closeDialog">取消</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')"
@@ -44,8 +45,10 @@
   </el-dialog>
   <!-- <el-button type="danger" @click="closeDialog">关闭</el-button> -->
 </template>
+
 <script>
-import ProjectApi from "../../request/project";
+// import HttpCommon from "../../HttpCommon"
+import ProjectApi from "../../request/project"
 
 export default {
   name: "Dialog",
@@ -59,7 +62,7 @@ export default {
       projectForm: {
         name: "",
         describe: "",
-        image: "9e93a67ac46b0fb26802ef37fe237867.png",
+        image: "",
       },
       rules: {
         name: [
@@ -67,93 +70,115 @@ export default {
         ],
       },
       fileList: [],
-    };
+      imageUrl: "",
+      imageVisible: false,
+      disabled: false,
+    }
   },
   mounted() {
     if (this.title == "create") {
-      this.showTitle = "创建项目";
+      this.showTitle = "创建项目"
     } else if (this.title == "edit") {
-      this.showTitle = "编辑项目";
-      this.initProject();
+      this.showTitle = "编辑项目"
+      this.initProject()
     }
   },
 
   methods: {
     closeDialog() {
-      console.log("closeDialog");
-      this.$emit("cancel", {});
+      console.log("closeDialog")
+      this.$emit("cancel", {})
     },
 
+    // 项目详情
     async initProject() {
-      console.log("initProject");
-      const resp = await ProjectApi.getProject(this.pid);
+      console.log("initProject")
+      const resp = await ProjectApi.getProject(this.pid)
       if (resp.success === true) {
-        this.projectForm = resp.item;
-        this.$message.success("项目详情成功！");
+        this.projectForm = resp.item
+        this.fileList.push({
+          name: resp.item.image,
+          url: "static/images/" + resp.item.image,
+        })
+        this.$message.success("项目详情成功！")
       } else {
-        this.$message.error("项目详情失败！");
+        this.$message.error("项目详情失败！")
       }
     },
     // 创建项目
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log("标题---》", this.title);
+          console.log("标题---》", this.title)
           if (this.title == "create") {
             ProjectApi.createProject(this.projectForm).then((resp) => {
               if (resp.success === true) {
-                this.closeDialog();
-                this.$message.success("创建成功！");
+                this.closeDialog()
+                this.$message.success("创建成功！")
               } else {
-                this.$message.error(resp.error.message);
+                this.$message.error(resp.error.message)
               }
-            });
+            })
           } else if (this.title == "edit") {
             ProjectApi.updateProject(this.pid, this.projectForm).then(
               (resp) => {
                 if (resp.success === true) {
-                  this.closeDialog();
-                  this.$message.success("编辑成功！");
+                  this.closeDialog()
+                  this.$message.success("编辑成功！")
                 } else {
-                  this.$message.error(resp.error.message);
+                  this.$message.error(resp.error.message)
                 }
               }
-            );
+            )
           }
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
 
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    // 删除图片
+    handleRemove(file) {
+      console.log("删除", file)
     },
-    handlePreview(file) {
-      console.log(file);
+
+    // 预览图片
+    handlePreview(file, fileList) {
+      console.log("上传成功", file, fileList)
+      this.imageUrl = file.url
+      this.imageVisible = true
     },
 
     beforeUpload(file) {
-      this.importDataBtnText = "正在导入";
-      this.importDataBtnIcon = "el-icon-loading";
-      this.importDataDisabled = "false";
-      console.log(file);
-      let fd = new FormData();
-      fd.append("filename", file);
-      fd.append("project_id", this.project_id);
-      fd.append("version_id", this.version_id);
-      this.$http.post("api/projects/upload", fd).then(
-        (res) => {
-          console.log("res", res);
-          this.importDataBtnText = "导入成功";
-        },
-        (res) => {
-          this.importDataBtnText = "导入失败";
-          console.log(res);
+      console.log("上传文件对象", file)
+
+      let fd = new FormData()
+      fd.append("file", file)
+
+      ProjectApi.updateImage(fd).then((resp) => {
+        console.log("resp-->", resp.data)
+        if (resp.data.success === true) {
+          this.projectForm.image = resp.data.item.name
+          const imagePath = "/static/images/" + resp.data.item.name
+          console.log("imagepath-->", imagePath)
+
+          this.fileList.push({
+            name: file.name,
+            url: imagePath,
+          })
+          this.$message.success("上传成功！")
+        } else {
+          console.log("上传失败", resp)
+          this.$message.error(resp.error.message)
         }
-      );
-      return false;
+      })
+      return true
     },
   },
-};
+}
 </script>
+<style scoped>
+#image {
+  text-align: left;
+}
+</style>
