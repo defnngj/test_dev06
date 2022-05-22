@@ -51,14 +51,14 @@ export default {
   data() {
     return {
       user: "",
-    };
+    }
   },
   created() {
-    this.user = sessionStorage.getItem("user");
+    this.user = sessionStorage.getItem("user")
   },
 
   methods: {},
-};
+}
 </script>
 
 <style>

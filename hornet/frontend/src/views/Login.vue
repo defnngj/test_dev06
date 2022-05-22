@@ -76,7 +76,7 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
-import UserApi from "../request/user";
+import UserApi from "../request/user"
 
 export default {
   name: "Home",
@@ -102,11 +102,11 @@ export default {
           { required: true, message: "请输入确认密码", trigger: "blur" },
         ],
       },
-    };
+    }
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      console.log(tab, event)
     },
 
     // 用户登录
@@ -116,19 +116,19 @@ export default {
           // alert('submit!');
           UserApi.login(this.loginForm).then((resp) => {
             if (resp.success === true) {
-              sessionStorage.token = resp.item.token;
-              sessionStorage.user = resp.item.username;
+              sessionStorage.token = resp.item.token
+              sessionStorage.user = resp.item.username
               // this.$store.commit('login', resp.data.Token)
-              this.$router.push({ path: "/main" });
-              this.$message.success("登录成功！");
+              this.$router.push({ path: "/main" })
+              this.$message.success("登录成功！")
             } else {
-              this.$message.error(resp.error.message);
+              this.$message.error(resp.error.message)
             }
-          });
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
 
     // 用户注册
@@ -138,18 +138,18 @@ export default {
           // alert('submit!');
           UserApi.register(this.registerForm).then((resp) => {
             if (resp.success === true) {
-              this.$message.success("注册成功！");
+              this.$message.success("注册成功！")
             } else {
-              this.$message.error(resp.error.message);
+              this.$message.error(resp.error.message)
             }
-          });
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style>

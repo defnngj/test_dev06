@@ -3,17 +3,17 @@
  * @date: 2021-10-20
  * @desc: 封装 axios HTTP接口调用
  */
-import axios from "axios";
-import { Loading } from "element-ui";
-import Qs from "qs";
+import axios from "axios"
+import { Loading } from "element-ui"
+import Qs from "qs"
 
-let loadingInstance;
-axios.defaults.baseURL = process.env.VUE_APP_URL;
-axios.defaults.headers.post["X-Requested-With"] = "XMLHttpRequest";
-axios.defaults.timeout = 300000;
+let loadingInstance
+axios.defaults.baseURL = process.env.VUE_APP_URL
+axios.defaults.headers.post["X-Requested-With"] = "XMLHttpRequest"
+axios.defaults.timeout = 300000
 
 function tellIfIsLogout(data) {
-  return String(data).indexOf("账户登录失败") !== -1;
+  return String(data).indexOf("账户登录失败") !== -1
 }
 
 function makeRequest(
@@ -23,39 +23,40 @@ function makeRequest(
   responseType,
   additionalHeader = {}
 ) {
-  const header = {};
+  const header = {}
   if (process.env.NODE_ENV === "local") {
-    header["Access-Control-Allow-Origin"] = "*";
+    header["Access-Control-Allow-Origin"] = "*"
   } else {
-    header["Access-Control-Allow-Origin"] = "*";
+    header["Access-Control-Allow-Origin"] = "*"
   }
 
   Object.keys(additionalHeader).forEach((key) => {
-    header[key] = additionalHeader[key];
-  });
+    header[key] = additionalHeader[key]
+  })
   const config = {
     headers: header,
     responseType: "json",
     maxRedirects: 5,
-  };
+  }
   if (responseType === "data") {
-    console.log(responseType);
-    dataOrParam = Qs.stringify(dataOrParam);
+    console.log("data--->", responseType)
+    console.log("data--->", responseType)
+    dataOrParam = Qs.stringify(dataOrParam)
   } else if (responseType === "blob") {
-    config.responseType = "blob";
-    config.method = "get";
+    config.responseType = "blob"
+    config.method = "get"
   }
   if (requestType === "get") {
-    config.params = dataOrParam;
-    return axios.get(url, config);
+    config.params = dataOrParam
+    return axios.get(url, config)
   } else if (requestType === "post") {
-    return axios.post(url, dataOrParam, config);
+    return axios.post(url, dataOrParam, config)
   } else if (requestType === "delete") {
-    return axios.delete(url, config);
+    return axios.delete(url, config)
   } else if (requestType === "put") {
-    return axios.put(url, dataOrParam, config);
+    return axios.put(url, dataOrParam, config)
   }
-  return axios.request(config);
+  return axios.request(config)
 }
 
 function commonRequest(
@@ -67,7 +68,7 @@ function commonRequest(
   additionalHeader = {}
 ) {
   if (isLoading) {
-    loadingInstance = Loading.service({ fullscreen: true });
+    loadingInstance = Loading.service({ fullscreen: true })
   }
 
   return makeRequest(
@@ -79,22 +80,22 @@ function commonRequest(
   )
     .then((resp) => {
       if (isLoading) {
-        loadingInstance.close();
+        loadingInstance.close()
       }
-      const data = resp.data;
+      const data = resp.data
       if (data.success === false) {
-        return Promise.reject(data);
+        return Promise.reject(data)
       }
-      return data;
+      return data
     })
     .catch((error) => {
-      let response = {};
+      let response = {}
       if (Object.prototype.hasOwnProperty.call(error, "response")) {
-        response = error.response.data;
+        response = error.response.data
       } else {
-        response = error;
+        response = error
       }
-      console.log("error: ", error);
+      console.log("error: ", error)
       /*
         error格式:
         {
@@ -111,15 +112,15 @@ function commonRequest(
       * */
 
       if (tellIfIsLogout(response)) {
-        window.location.reload();
-        return;
+        window.location.reload()
+        return
       }
 
       if (isLoading) {
-        loadingInstance.close();
+        loadingInstance.close()
       }
-      return error;
-    });
+      return error
+    })
 }
 
 export default {
@@ -137,7 +138,7 @@ export default {
       responseType,
       isLoading,
       additionalHeader
-    );
+    )
   },
 
   post(
@@ -154,7 +155,7 @@ export default {
       responseType,
       isLoading,
       additionalHeader
-    );
+    )
   },
 
   delete(
@@ -171,7 +172,7 @@ export default {
       responseType,
       isLoading,
       additionalHeader
-    );
+    )
   },
 
   patch(
@@ -188,7 +189,7 @@ export default {
       responseType,
       isLoading,
       additionalHeader
-    );
+    )
   },
 
   put(
@@ -205,6 +206,6 @@ export default {
       responseType,
       isLoading,
       additionalHeader
-    );
+    )
   },
-};
+}

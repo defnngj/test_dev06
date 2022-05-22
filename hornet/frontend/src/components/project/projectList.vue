@@ -68,8 +68,8 @@
 
 <script>
 // @ is an alias to /src
-import projectDialog from "@/components/project/projectDialog.vue";
-import ProjectApi from "../../request/project";
+import projectDialog from "@/components/project/projectDialog.vue"
+import ProjectApi from "../../request/project"
 
 export default {
   name: "Porject",
@@ -87,58 +87,58 @@ export default {
         size: 6,
       },
       total: 50,
-    };
+    }
   },
   mounted() {
-    console.log("mounted11");
-    this.initProjectList();
+    console.log("mounted11")
+    this.initProjectList()
   },
 
   methods: {
     async initProjectList() {
-      const resp = await ProjectApi.getProjects(this.req);
+      const resp = await ProjectApi.getProjects(this.req)
       if (resp.success === true) {
-        this.projectData = resp.items;
-        this.total = resp.total;
-        this.$message.success("查询成功！");
+        this.projectData = resp.items
+        this.total = resp.total
+        this.$message.success("查询成功！")
       } else {
-        this.$message.error("查询失败！");
+        this.$message.error("查询失败！")
       }
     },
 
     showDialog() {
-      this.dialogTitle = "create";
-      this.dialogFlag = true;
+      this.dialogTitle = "create"
+      this.dialogFlag = true
     },
 
     closeDialog() {
-      this.dialogFlag = false;
-      this.initProjectList();
+      this.dialogFlag = false
+      this.initProjectList()
     },
 
     // 跳转到第几页
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.req.page = val;
-      this.initProjectList();
+      console.log(`当前页: ${val}`)
+      this.req.page = val
+      this.initProjectList()
     },
 
     showEdit(id) {
-      this.currentPorjectId = id;
-      this.dialogTitle = "edit";
-      this.dialogFlag = true;
+      this.currentPorjectId = id
+      this.dialogTitle = "edit"
+      this.dialogFlag = true
     },
 
     // 删除项目
     async deleteProject(id) {
-      const resp = await ProjectApi.deleteProject(id);
+      const resp = await ProjectApi.deleteProject(id)
       if (resp.success === true) {
-        this.initProjectList();
-        this.$message.success("删除成功！");
+        this.initProjectList()
+        this.$message.success("删除成功！")
       } else {
-        this.$message.error("删除失败！");
+        this.$message.error("删除失败！")
       }
     },
   },
-};
+}
 </script>
