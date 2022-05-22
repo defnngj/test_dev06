@@ -4,6 +4,7 @@ import VueRouter from "vue-router"
 import Login from "../views/Login.vue"
 import Navigation from "../views/Navigation.vue"
 import Project from "../components/project/projectList.vue"
+import caseModule from "../components/case/caseModule.vue"
 
 Vue.use(VueRouter)
 
@@ -25,6 +26,10 @@ const routes = [
       {
         path: "project",
         component: Project,
+      },
+      {
+        path: "case",
+        component: caseModule,
       },
       {
         path: "about",

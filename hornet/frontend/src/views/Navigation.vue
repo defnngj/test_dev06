@@ -16,6 +16,12 @@
               <template #title>项目管理</template>
             </el-menu-item>
           </router-link>
+          <router-link to="/main/case">
+            <el-menu-item index="1" class="menu-option">
+              <i class="el-icon-s-grid"></i>
+              <template #title>用例管理</template>
+            </el-menu-item>
+          </router-link>
           <router-link to="/main/about">
             <el-menu-item index="1" class="menu-option">
               <i class="el-icon-s-home"></i>
@@ -39,7 +45,9 @@
         </el-header>
 
         <el-main style="background-color: #f1f3fa">
-          <router-view> </router-view>
+          <el-card>
+            <router-view> </router-view>
+          </el-card>
         </el-main>
       </el-container>
     </el-container>
