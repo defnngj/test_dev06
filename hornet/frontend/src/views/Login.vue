@@ -152,7 +152,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .main-window {
   text-align: center;
   margin: 0 auto;

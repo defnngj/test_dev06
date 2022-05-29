@@ -45,7 +45,7 @@
         </el-header>
 
         <el-main style="background-color: #f1f3fa">
-          <el-card>
+          <el-card style="min-height: 800px">
             <router-view> </router-view>
           </el-card>
         </el-main>
@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .navigation {
   height: 100%;
 }

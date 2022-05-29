@@ -43,8 +43,8 @@
           @node-click="nodeClick"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span>{{ node.label }}</span>
-            <span>
+            <span style="float: left">{{ node.label }}</span>
+            <span style="float: right">
               <el-button type="text" size="mini" @click="() => append(data)">
                 <i class="el-icon-circle-plus-outline"></i>
               </el-button>
@@ -181,6 +181,7 @@ export default {
       }
     },
 
+    // 添加子节点
     append(data) {
       console.log("创建子节点", data.label)
       this.dialogFlag = true
@@ -188,6 +189,7 @@ export default {
       this.parentObj = data
     },
 
+    // 移除子节点
     remove(node, data) {
       console.log("删除节点", data)
       ModuleApi.deleteModule(data.id).then((resp) => {
@@ -229,7 +231,8 @@ export default {
     },
 
     createCase() {
-      ;(this.drawer = true), (this.caseTitle = "创建用例")
+      this.drawer = true
+      this.caseTitle = "创建用例"
     },
 
     caseRowClick(row) {
@@ -243,18 +246,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.custom-tree-node {
+  width: 100%;
 }
 </style>
