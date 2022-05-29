@@ -62,9 +62,9 @@ class CaseDebugIn(Schema):
     """用例调试入参"""
     url: str
     method: str
-    header: dict
+    header: str
     params_type: str
-    params_body: dict
+    params_body: str
 
 
 class CaseAssertIn(Schema):
@@ -80,6 +80,7 @@ class ModuleSchema(Schema):
 
 
 class CaseOut(Schema):
+    id: int
     name: str
     module_id: int
     url: str

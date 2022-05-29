@@ -26,9 +26,11 @@ class MyTest(unittest.TestCase):
 
         elif method == "post":
             if params_type == "form":
-                resp = requests.post(url, headers=header, data=params_body).text
+                resp = requests.post(url, headers=header,
+                                     data=params_body).text
             elif params_type == "json":
-                resp = requests.post(url, headers=header, json=params_body).text
+                resp = requests.post(url, headers=header,
+                                     json=params_body).text
 
         elif method == "put":
             if params_type == "form":
@@ -38,9 +40,11 @@ class MyTest(unittest.TestCase):
 
         elif method == "delete":
             if params_type == "form":
-                resp = requests.delete(url, headers=header, data=params_body).text
+                resp = requests.delete(
+                    url, headers=header, data=params_body).text
             elif params_type == "json":
-                resp = requests.delete(url, headers=header, json=params_body).text
+                resp = requests.delete(
+                    url, headers=header, json=params_body).text
 
         if assert_type == "include":
             self.assertIn(assert_text, resp)
@@ -53,25 +57,3 @@ if __name__ == '__main__':
     report = "./xml_result.xml"
     with(open(report, 'wb')) as fp:
         unittest.main(testRunner=XMLTestRunner(output=fp))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

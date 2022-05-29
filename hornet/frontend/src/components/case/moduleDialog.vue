@@ -13,7 +13,10 @@
       class="demo-ruleForm"
     >
       <el-form-item label="项目" prop="name">
-        <el-input v-model="plabel" disabled></el-input>
+        <el-input v-model="projectLabel" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="父节点" v-if="parentObj.label !== ''">
+        <el-input v-model="parentObj.label" disabled></el-input>
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="moduleForm.name"></el-input>
@@ -34,7 +37,7 @@ import ModuleApi from "../../request/module"
 
 export default {
   name: "Dialog",
-  props: ["pid", "plabel", "rootId"],
+  props: ["projectId", "projectLabel", "rootId", "parentObj"],
   components: {},
   data() {
     return {
@@ -58,13 +61,13 @@ export default {
     }
   },
   mounted() {
-    this.moduleForm.project_id = this.pid
+    this.moduleForm.project_id = this.projectId
 
     if (this.rootId == true) {
       this.showTitle = "创建根节点"
-    } else if (this.title == "edit") {
-      this.showTitle = "编辑项目"
-      this.initProject()
+    } else {
+      this.showTitle = "创建子节点"
+      this.moduleForm.parent_id = this.parentObj.id
     }
   },
 
@@ -83,7 +86,7 @@ export default {
               this.closeDialog()
               this.$message.success("创建成功！")
             } else {
-              this.$message.error(resp.error.message)
+              this.$message.error(resp.error.msg)
             }
           })
         }

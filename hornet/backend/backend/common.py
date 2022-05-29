@@ -55,6 +55,9 @@ def response(success: bool = True, error=None, item=None) -> dict:
         error_code = list(error.keys())[0]
         error_msg = list(error.values())[0]
 
+    if item is None:
+        item = {}
+
     resp_data = {
         "success": success,
         "error": {

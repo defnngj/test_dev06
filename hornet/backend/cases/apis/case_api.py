@@ -1,3 +1,5 @@
+import json
+
 import requests
 from ninja import Router
 from django.shortcuts import get_object_or_404
@@ -73,6 +75,11 @@ def debug_case(request, data: CaseDebugIn):
     header = data.header
     params_type = data.params_type
     params_body = data.params_body
+
+    header = json.loads(header)
+    params_body = json.loads(params_body)
+    print("header", type(header), header)
+    print("params_body", type(params_body), params_body)
 
     resp = ""
     if method == "get":

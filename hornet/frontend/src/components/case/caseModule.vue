@@ -4,7 +4,7 @@
       <span style="float: left">
         <p>项目:</p>
       </span>
-      <span>
+      <span style="float: left">
         <el-select
           v-model="projectValue"
           placeholder="请选择项目"
@@ -20,9 +20,14 @@
           </el-option>
         </el-select>
       </span>
+      <span>
+        <el-button @click="createCase()" type="primary" size="medium"
+          >创建</el-button
+        >
+      </span>
     </div>
     <div style="margin-top: 10px">
-      <el-card style="width: 300px">
+      <el-card style="width: 28%; float: left">
         <el-button
           type="text"
           icon="el-icon-circle-plus-outline"
@@ -35,6 +40,7 @@
           node-key="id"
           default-expand-all
           :expand-on-click-node="false"
+          @node-click="nodeClick"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
@@ -53,14 +59,45 @@
           </span>
         </el-tree>
       </el-card>
+      <div style="width: 70%; float: right">
+        <el-table
+          :data="casesData"
+          border
+          style="width: 100%"
+          @row-click="caseRowClick"
+        >
+          <el-table-column prop="id" label="ID" width="50"> </el-table-column>
+          <el-table-column prop="name" label="名称" width="180">
+          </el-table-column>
+          <el-table-column prop="method" label="方法" width="80">
+          </el-table-column>
+          <el-table-column prop="url" label="URL" width="180">
+          </el-table-column>
+          <el-table-column prop="module.name" label="模块" width="100">
+          </el-table-column>
+          <el-table-column prop="create_time" label="创建时间">
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <el-drawer
+        :title="caseTitle"
+        :visible.sync="drawer"
+        direction="ltr"
+        :before-close="handleClose"
+        size="50%"
+      >
+        <CaseDialog v-if="drawer"></CaseDialog>
+      </el-drawer>
     </div>
 
     <!-- 创建模块 -->
     <moduleDialog
       v-if="dialogFlag"
-      :pid="projectValue"
-      :plabel="projectLabel"
+      :projectId="projectValue"
+      :projectLabel="projectLabel"
       :rootId="rootFlag"
+      :parentObj="parentObj"
       @cancel="closeDialog"
     >
     </moduleDialog>
@@ -71,11 +108,13 @@
 import ProjectApi from "../../request/project"
 import ModuleApi from "../../request/module"
 import moduleDialog from "./moduleDialog.vue"
+import CaseDialog from "./CaseDialog.vue"
 
 export default {
   name: "HelloWorld",
   components: {
     moduleDialog,
+    CaseDialog,
   },
   data() {
     return {
@@ -85,6 +124,10 @@ export default {
       projectOption: [],
       moduleData: [],
       dialogFlag: false,
+      parentObj: {},
+      casesData: [],
+      drawer: false,
+      caseTitle: "",
     }
   },
   mounted() {
@@ -139,24 +182,25 @@ export default {
     },
 
     append(data) {
-      console.log("创建子节点", data)
-      // console.log("data", data)
-      // const newChild = { id: id++, label: "testtest", children: [] }
-      // if (!data.children) {
-      //   this.$set(data, "children", [])
-      // }
-      // data.children.push(newChild)
+      console.log("创建子节点", data.label)
+      this.dialogFlag = true
+      this.rootFlag = false
+      this.parentObj = data
     },
 
     remove(node, data) {
-      console.log("删除节点", node, data)
-      // const parent = node.parent
-      // const children = parent.data.children || parent.data
-      // const index = children.findIndex((d) => d.id === data.id)
-      // children.splice(index, 1)
+      console.log("删除节点", data)
+      ModuleApi.deleteModule(data.id).then((resp) => {
+        if (resp.success === true) {
+          this.$message.success("删除成功！")
+          this.initModuleList(this.projectValue)
+        } else {
+          this.$message.error(resp.error.msg)
+        }
+      })
     },
 
-    // 创建模块
+    // 创建根节点
     createRootModule() {
       this.dialogFlag = true
       this.rootFlag = true
@@ -165,7 +209,33 @@ export default {
     // 创建模块关闭
     closeDialog() {
       this.dialogFlag = false
+      this.parentObj = {}
       this.initModuleList(this.projectValue)
+    },
+
+    nodeClick(data) {
+      console.log("点击节点", data)
+      this.getCaseList(data.id)
+    },
+
+    async getCaseList(mid) {
+      const resp = await ModuleApi.getModuleCase(mid)
+      if (resp.success === true) {
+        this.casesData = resp.items
+        this.$message.success("查询成功！")
+      } else {
+        this.$message.error("查询失败！")
+      }
+    },
+
+    createCase() {
+      ;(this.drawer = true), (this.caseTitle = "创建用例")
+    },
+
+    caseRowClick(row) {
+      console.log("点击用例", row)
+      this.drawer = true
+      this.caseTitle = "查看用例"
     },
   },
 }
