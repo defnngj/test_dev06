@@ -26,7 +26,6 @@ class GlobalAuth(HttpBearer):
         """
         try:
            session = Session.objects.get(pk=token)
-           print("--->", type(session))
            # # 有效时间
            # SESSION_COOKIE_AGE
            # # 当前时间

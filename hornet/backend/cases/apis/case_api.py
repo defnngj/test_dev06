@@ -78,8 +78,6 @@ def debug_case(request, data: CaseDebugIn):
 
     header = json.loads(header)
     params_body = json.loads(params_body)
-    print("header", type(header), header)
-    print("params_body", type(params_body), params_body)
 
     resp = ""
     if method == "get":
@@ -109,7 +107,6 @@ def debug_case(request, data: CaseDebugIn):
         else:
             return response(error=Error.CASE_PARAMS_ERROR)
 
-    print(resp)
     return response(item={"response": resp})
 
 
@@ -119,7 +116,6 @@ def assert_case(request, data: CaseAssertIn):
     用例断言
     auth=None 该接口不需要认证
     """
-    print("data", data)
     resp = data.response
     assert_type = data.assert_type
     assert_text = data.assert_text

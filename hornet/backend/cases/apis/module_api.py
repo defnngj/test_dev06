@@ -24,7 +24,6 @@ def create_module(request, data: ModuleIn):
         return response(error=Error.PROJECT_NOT_EXIST)
 
     module = Module.objects.filter(name=data.name, project_id=data.project_id)
-    print("module", module)
     if len(module) > 0:
         return response(error=Error.MODULE_NAME_EXIST)
 
@@ -63,7 +62,6 @@ def child_node(nodes, current_node):
     """
     for node in nodes:
         if node["parent_id"] == current_node["id"]:
-            print("有子节点", current_node["label"])
             return True
     return False
 
@@ -73,10 +71,7 @@ def get_module_tree(request, filters: ProjectIn = Query(...)):
     """
     获取模块树
     """
-    print(filters.project_id)
     modules = Module.objects.filter(project_id=filters.project_id, is_delete=False)
-    for m in modules:
-        print("m", m.name)
 
     data_node = []
     for n in modules:
@@ -86,7 +81,6 @@ def get_module_tree(request, filters: ProjectIn = Query(...)):
             "label": n.name,
             "children": [],
         })
-    print("data_node", data_node)
 
     data = []
     for n in data_node:
