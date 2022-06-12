@@ -84,10 +84,13 @@
         :title="caseTitle"
         :visible.sync="drawer"
         direction="ltr"
-        :before-close="handleClose"
         size="50%"
       >
-        <CaseDialog v-if="drawer"></CaseDialog>
+        <CaseDialog
+          v-if="drawer"
+          :mid="currentModule"
+          :cid="currentCase"
+        ></CaseDialog>
       </el-drawer>
     </div>
 
@@ -128,6 +131,8 @@ export default {
       casesData: [],
       drawer: false,
       caseTitle: "",
+      currentModule: 0, // 当前选中的模块
+      currentCase: 0, // 当前选中的用例
     }
   },
   mounted() {
@@ -215,8 +220,10 @@ export default {
       this.initModuleList(this.projectValue)
     },
 
+    // 点击模块
     nodeClick(data) {
       console.log("点击节点", data)
+      this.currentModule = data.id
       this.getCaseList(data.id)
     },
 
@@ -237,6 +244,7 @@ export default {
 
     caseRowClick(row) {
       console.log("点击用例", row)
+      this.currentCase = row.id
       this.drawer = true
       this.caseTitle = "查看用例"
     },

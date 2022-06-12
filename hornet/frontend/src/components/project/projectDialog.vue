@@ -109,7 +109,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log("标题---》", this.title)
           if (this.title == "create") {
             ProjectApi.createProject(this.projectForm).then((resp) => {
               if (resp.success === true) {

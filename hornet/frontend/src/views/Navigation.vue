@@ -22,6 +22,12 @@
               <template #title>用例管理</template>
             </el-menu-item>
           </router-link>
+          <router-link to="/main/task">
+            <el-menu-item index="1" class="menu-option">
+              <i class="el-icon-s-order"></i>
+              <template #title>任务管理</template>
+            </el-menu-item>
+          </router-link>
           <router-link to="/main/about">
             <el-menu-item index="1" class="menu-option">
               <i class="el-icon-s-home"></i>

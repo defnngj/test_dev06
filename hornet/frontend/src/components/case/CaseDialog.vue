@@ -35,7 +35,7 @@
       <el-radio v-model="caseForm.params_type" label="json">JSON</el-radio>
     </div>
     <div class="div-line" style="height: 220px">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="Headers" name="first">
           <vueJsonEditor
             v-model="caseForm.header"
@@ -60,7 +60,7 @@
       </el-input>
     </div>
     <div class="div-line">
-      <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse>
         <el-collapse-item title="断言" name="1">
           <div style="height: 40px">
             <el-radio v-model="caseForm.assert_type" label="include"
@@ -69,7 +69,12 @@
             <el-radio v-model="caseForm.assert_type" label="equal"
               >Equal</el-radio
             >
-            <el-button class="debug-button" type="success" plain size="small"
+            <el-button
+              class="debug-button"
+              type="success"
+              plain
+              size="small"
+              @click="assertclick()"
               >断言</el-button
             >
           </div>
@@ -92,7 +97,11 @@
         size="small"
         style="width: 60%; float: left"
       ></el-input>
-      <el-button type="primary" size="small" style="float: left"
+      <el-button
+        type="primary"
+        size="small"
+        style="float: left"
+        @click="saveClick()"
         >保存</el-button
       >
     </div>
@@ -105,6 +114,7 @@ import CaseApi from "../../request/case"
 
 export default {
   name: "caseDialog",
+  props: ["mid", "cid"],
   components: {
     vueJsonEditor,
   },
@@ -148,7 +158,30 @@ export default {
     }
   },
 
+  mounted() {
+    this.caseForm.module_id = this.mid
+    console.log("cid", this.cid)
+    if (this.cid !== 0) {
+      // 调用接口获取数据
+      this.getCaseInfo()
+    }
+  },
+
   methods: {
+    // 获取一条用例信息
+    async getCaseInfo() {
+      const resp = await CaseApi.getCase(this.cid)
+      if (resp.success === true) {
+        this.caseForm = resp.item
+        const header = resp.item.header.replace(/'/g, '"')
+        const params_body = resp.item.params_body.replace(/'/g, '"')
+        this.caseForm.header = JSON.parse(header)
+        this.caseForm.params_body = JSON.parse(params_body)
+      } else {
+        this.$message.error(resp.error.msg)
+      }
+    },
+
     async sendClick() {
       const req = {
         method: this.caseForm.method,
@@ -163,6 +196,31 @@ export default {
         this.caseForm.response = resp.item.response
       } else {
         console.log(resp)
+      }
+    },
+
+    async assertclick() {
+      const req = {
+        response: this.caseForm.response,
+        assert_type: this.caseForm.assert_type,
+        assert_text: this.caseForm.assert_text,
+      }
+
+      const resp = await CaseApi.assertCase(req)
+      if (resp.success === true) {
+        this.$message.success("断言成功")
+      } else {
+        this.$message.error("断言失败")
+      }
+    },
+
+    // 保存用例
+    async saveClick() {
+      const resp = await CaseApi.createCase(this.caseForm)
+      if (resp.success === true) {
+        this.$message.success("保存成功")
+      } else {
+        this.$message.error(resp.error.msg)
       }
     },
   },
