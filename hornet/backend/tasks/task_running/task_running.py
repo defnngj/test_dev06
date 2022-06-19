@@ -16,15 +16,21 @@ def running(task_id):
     """运行测试任务"""
     print("1. 读取测试用例")
     time.sleep(10)
-    relevance = TaskCaseRelevance.objects.filter(task_id=task_id)
+    relevance = TaskCaseRelevance.objects.get(task_id=task_id)
+    relevance_list = json.loads(relevance.case)
+    # [{"moduleId": 1, "casesId": [1, 2, 3]}, {"moduleId": 6, "casesId": [5, 6]}]
+    case_ids = []
+    for rel in relevance_list:
+        case_ids = case_ids + rel["casesId"]
 
     test_case = {}
-    for rel in relevance:
+    for cid in case_ids:
         try:
-            case = TestCase.objects.get(pk=rel.case_id, is_delete=False)
+            case = TestCase.objects.get(pk=cid, is_delete=False)
+            header = case.header.replace("\'", "\"")
             params_body = case.params_body.replace("\'", "\"")
 
-            header_dict = json.loads(case.header)
+            header_dict = json.loads(header)
             params_body_dict = json.loads(params_body)
             test_case[case.name] = {
                 "url": case.url,

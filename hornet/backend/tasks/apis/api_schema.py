@@ -11,6 +11,21 @@ class TaskIn(Schema):
     cases: list
 
 
+class TaskCaseRelevance(Schema):
+    id: int
+    case: str
+
+
+class TaskOut(Schema):
+    id: int
+    name: str
+    status: int
+    describe: str = None
+    create_time: Any
+    update_time: Any
+    # task: TaskCaseRelevance = None
+
+
 class ResultOut(Schema):
     """测试报告返回"""
     name: str

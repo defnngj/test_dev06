@@ -15,7 +15,7 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="taskForm.name"></el-input>
       </el-form-item>
-      <el-form-item label="描述" prop="desc">
+      <el-form-item label="描述">
         <el-input type="textarea" v-model="taskForm.describe"></el-input>
       </el-form-item>
       <el-form-item>
@@ -53,8 +53,10 @@
       <el-form-item style="text-align: right">
         <div class="dialog-footer">
           已选择【{{ this.caseNum }}】条用例
-          <el-button @click="cancelTask()">取消</el-button>
-          <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+          <el-button @click="closeDialog()">取消</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')"
+            >保存</el-button
+          >
         </div>
       </el-form-item>
     </el-form>
@@ -64,23 +66,25 @@
 <script>
 import ProjectApi from "../../request/project"
 import ModuleApi from "../../request/module"
+import TaskApi from "../../request/task"
 
 export default {
   name: "Dialog",
-  props: ["title", "pid"],
+  props: ["title", "pid", "tid"],
   components: {},
   data() {
     return {
       showTitle: "",
       dialogVisible: true,
       taskForm: {
+        project: 0,
         name: "",
         describe: "",
         cases: [],
       },
       rules: {
         name: [
-          { required: true, message: "请输入项目的名称", trigger: "blur" },
+          { required: true, message: "请输入任务的名称", trigger: "blur" },
         ],
       },
       moduleData: [],
@@ -90,18 +94,17 @@ export default {
     }
   },
   mounted() {
+    this.taskForm.project = this.pid
     if (this.title == "create") {
       this.showTitle = "创建任务"
     } else if (this.title == "edit") {
       this.showTitle = "编辑任务"
-      // this.initProject()
     }
     this.initModuleList()
   },
 
   methods: {
     closeDialog() {
-      console.log("closeDialog")
       this.$emit("cancel", {})
     },
 
@@ -111,6 +114,22 @@ export default {
       const resp = await ModuleApi.getModuleTree(req)
       if (resp.success === true) {
         this.moduleData = resp.items
+        console.log("??", this.title)
+        if (this.title == "edit") {
+          this.initTaskInfo()
+        }
+        // this.initTaskInfo()
+      } else {
+        this.$message.error("查询失败！")
+      }
+    },
+
+    // 查询任务详情
+    async initTaskInfo() {
+      const resp = await TaskApi.getTaskDetail(this.tid)
+      if (resp.success === true) {
+        this.taskForm = resp.item
+        this.calculationCase()
       } else {
         this.$message.error("查询失败！")
       }
@@ -223,7 +242,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.title == "create") {
-            ProjectApi.createProject(this.taskForm).then((resp) => {
+            TaskApi.createTask(this.taskForm).then((resp) => {
               if (resp.success === true) {
                 this.closeDialog()
                 this.$message.success("创建成功！")
@@ -232,10 +251,10 @@ export default {
               }
             })
           } else if (this.title == "edit") {
-            ProjectApi.updateProject(this.pid, this.taskForm).then((resp) => {
+            TaskApi.updateTask(this.tid, this.taskForm).then((resp) => {
               if (resp.success === true) {
                 this.closeDialog()
-                this.$message.success("编辑成功！")
+                this.$message.success("更新成功！")
               } else {
                 this.$message.error(resp.error.message)
               }

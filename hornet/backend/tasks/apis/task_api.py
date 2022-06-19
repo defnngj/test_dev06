@@ -1,5 +1,7 @@
+import json
 from typing import List
 from ninja import Router
+from ninja import Query
 from ninja.pagination import paginate
 from django.db.utils import IntegrityError
 from django.forms.models import model_to_dict
@@ -8,12 +10,24 @@ from backend.pagination import CustomPagination
 from backend.common import response, Error, model_to_dict
 from projects.models import Project
 from tasks.models import TestTask, TaskCaseRelevance, TestResult
-from tasks.apis.api_schema import TaskIn, ResultOut
+from tasks.apis.api_schema import TaskIn, ResultOut, TaskOut
 from tasks.task_running.task_running import run2
 from cases.models import TestCase
+from cases.apis.api_schema import ProjectIn
 
 
 router = Router(tags=["tasks"])
+
+
+@router.get("/list", auth=None, response=List[TaskOut])
+@paginate(CustomPagination)
+def get_task_list(request, filters: ProjectIn = Query(...)):
+    """
+    获取项目列表
+    auth=None 该接口不需要认证
+    """
+    print("project_id-->", filters.project_id)
+    return TestTask.objects.filter(project_id=filters.project_id, is_delete=False).all()
 
 
 @router.post("/", auth=None)
@@ -25,13 +39,8 @@ def create_task(request, data: TaskIn):
     project = get_object_or_404(Project, pk=data.project)
     task = TestTask.objects.create(project=project, name=data.name, describe=data.describe)
     cases = []
-    for case in data.cases:
-        TaskCaseRelevance.objects.create(task_id=task.id, case_id=case)
-        case = TestCase.objects.get(pk=case)
-        cases.append({
-            "case": case.id,
-            "module": case.module_id
-        })
+    cases_json = json.dumps(data.cases)
+    TaskCaseRelevance.objects.create(task_id=task.id, case=cases_json)
     task_dict = model_to_dict(task)
     task_dict["cases"] = cases
 
@@ -62,13 +71,10 @@ def get_task_detail(request, task_id: int):
     task = get_object_or_404(TestTask, id=task_id)
     if task.is_delete is True:
         return response(error=Error.TASK_DELETE_ERROR)
-    relevance = TaskCaseRelevance.objects.filter(task_id=task.id)
-    case_list = []
-    for r in relevance:
-        case_list.append(r.case_id)
+    relevance = TaskCaseRelevance.objects.get(task_id=task.id)
 
     task_dict = model_to_dict(task)
-    task_dict["cases"] = case_list
+    task_dict["cases"] = json.loads(relevance.case)
 
     return response(item=task_dict)
 
@@ -85,22 +91,12 @@ def update_task(request, task_id: int,  data: TaskIn):
     task.describe = data.describe
     task.save()
 
-    relevance = TaskCaseRelevance.objects.filter(task_id=task_id)
-    relevance.delete()
-    cases = []
-    for case in data.cases:
-        try:
-            TaskCaseRelevance.objects.create(task_id=task.id, case_id=case)
-        except IntegrityError:
-            return response(error=Error.CASE_NOT_EXIST)
+    relevance = TaskCaseRelevance.objects.get(task_id=task.id)
+    relevance.case = json.dumps(data.cases)
+    relevance.save()
 
-        case = TestCase.objects.get(pk=case)
-        cases.append({
-            "case": case.id,
-            "module": case.module_id
-        })
     task_dict = model_to_dict(task)
-    task_dict["cases"] = cases
+    task_dict["cases"] = data.cases
 
     return response(item=task_dict)
 
