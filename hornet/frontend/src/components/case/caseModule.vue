@@ -18,32 +18,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- <div style="height: 50px">
-      <span style="float: left">
-        <p>项目:</p>
-      </span>
-      <span style="float: left">
-        <el-select
-          v-model="projectValue"
-          placeholder="请选择项目"
-          size="medium"
-          @change="changeProject"
-        >
-          <el-option
-            v-for="item in projectOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </span>
-      <span>
-        <el-button @click="createCase()" type="primary" size="medium"
-          >创建</el-button
-        >
-      </span>
-    </div> -->
     <div style="margin-top: 10px">
       <el-card style="width: 28%; float: left">
         <el-button
@@ -54,7 +28,6 @@
         >
         <el-tree
           :data="moduleData"
-          show-checkbox
           node-key="id"
           default-expand-all
           :expand-on-click-node="false"
