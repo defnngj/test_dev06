@@ -160,7 +160,6 @@ export default {
 
   mounted() {
     this.caseForm.module_id = this.mid
-    console.log("cid", this.cid)
     if (this.cid !== 0) {
       // 调用接口获取数据
       this.getCaseInfo()
@@ -192,7 +191,6 @@ export default {
       }
       const resp = await CaseApi.debugCase(req)
       if (resp.success === true) {
-        console.log(resp)
         this.caseForm.response = resp.item.response
       } else {
         console.log(resp)

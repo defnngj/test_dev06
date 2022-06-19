@@ -136,7 +136,6 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted11")
     this.initProjectList()
     this.initModuleList(this.projectValue)
   },
@@ -164,12 +163,10 @@ export default {
 
     // 修改选中项目
     changeProject(value) {
-      console.log("change project -->", value)
       this.projectValue = value
       this.projectLabel = this.projectOption.find(
         (item) => item.value === value
       ).label
-      console.log("选择项目名称", this.projectLabel)
       this.initModuleList(value)
     },
 
@@ -178,7 +175,6 @@ export default {
       const req = { project_id: pid }
       const resp = await ModuleApi.getModuleTree(req)
       if (resp.success === true) {
-        console.log("module list -->", resp.items)
         this.moduleData = resp.items
         // this.$message.success("查询成功！")
       } else {
@@ -188,7 +184,6 @@ export default {
 
     // 添加子节点
     append(data) {
-      console.log("创建子节点", data.label)
       this.dialogFlag = true
       this.rootFlag = false
       this.parentObj = data
@@ -196,7 +191,6 @@ export default {
 
     // 移除子节点
     remove(node, data) {
-      console.log("删除节点", data)
       ModuleApi.deleteModule(data.id).then((resp) => {
         if (resp.success === true) {
           this.$message.success("删除成功！")
@@ -222,7 +216,6 @@ export default {
 
     // 点击模块
     nodeClick(data) {
-      console.log("点击节点", data)
       this.currentModule = data.id
       this.getCaseList(data.id)
     },
@@ -243,7 +236,6 @@ export default {
     },
 
     caseRowClick(row) {
-      console.log("点击用例", row)
       this.currentCase = row.id
       this.drawer = true
       this.caseTitle = "查看用例"

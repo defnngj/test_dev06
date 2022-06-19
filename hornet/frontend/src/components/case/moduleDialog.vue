@@ -73,7 +73,6 @@ export default {
 
   methods: {
     closeDialog() {
-      console.log("closeDialog")
       this.$emit("cancel", {})
     },
 
@@ -100,7 +99,6 @@ export default {
 
     // 预览图片
     handlePreview(file, fileList) {
-      console.log("上传成功", file, fileList)
       this.imageUrl = file.url
       this.imageVisible = true
     },

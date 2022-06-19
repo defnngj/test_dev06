@@ -114,11 +114,9 @@ export default {
       const resp = await ModuleApi.getModuleTree(req)
       if (resp.success === true) {
         this.moduleData = resp.items
-        console.log("??", this.title)
         if (this.title == "edit") {
           this.initTaskInfo()
         }
-        // this.initTaskInfo()
       } else {
         this.$message.error("查询失败！")
       }
@@ -137,7 +135,6 @@ export default {
 
     // 点击模块
     nodeClick(data) {
-      console.log("点击节点", data)
       this.currentModuleId = data.id
       this.getModuleCaseList(data.id)
     },
@@ -175,7 +172,6 @@ export default {
           casesId: moduleCases,
         })
       }
-      console.log("this.taskForm.cases", this.taskForm.cases)
       this.calculationCase()
     },
 
@@ -191,7 +187,6 @@ export default {
           var casesId = []
           for (let i = 0; i < this.taskForm.cases.length; i++) {
             if (this.taskForm.cases[i].moduleId == mid) {
-              console.log("aa", this.taskForm.cases[i].casesId)
               casesId = this.taskForm.cases[i].casesId
             }
           }
@@ -223,7 +218,6 @@ export default {
 
     // 项目详情
     async initProject() {
-      console.log("initProject")
       const resp = await ProjectApi.getProject(this.pid)
       if (resp.success === true) {
         this.taskForm = resp.item

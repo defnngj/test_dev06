@@ -86,13 +86,11 @@ export default {
 
   methods: {
     closeDialog() {
-      console.log("closeDialog")
       this.$emit("cancel", {})
     },
 
     // 项目详情
     async initProject() {
-      console.log("initProject")
       const resp = await ProjectApi.getProject(this.pid)
       if (resp.success === true) {
         this.projectForm = resp.item
@@ -143,23 +141,19 @@ export default {
 
     // 预览图片
     handlePreview(file, fileList) {
-      console.log("上传成功", file, fileList)
       this.imageUrl = file.url
       this.imageVisible = true
     },
 
     beforeUpload(file) {
-      console.log("上传文件对象", file)
 
       let fd = new FormData()
       fd.append("file", file)
 
       ProjectApi.updateImage(fd).then((resp) => {
-        console.log("resp-->", resp.data)
         if (resp.data.success === true) {
           this.projectForm.image = resp.data.item.name
           const imagePath = "/static/images/" + resp.data.item.name
-          console.log("imagepath-->", imagePath)
 
           this.fileList.push({
             name: file.name,
@@ -167,7 +161,6 @@ export default {
           })
           this.$message.success("上传成功！")
         } else {
-          console.log("上传失败", resp)
           this.$message.error(resp.error.message)
         }
       })

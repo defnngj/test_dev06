@@ -85,7 +85,6 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted11")
     this.initProjectList()
   },
 
@@ -118,7 +117,6 @@ export default {
 
     // 跳转到第几页
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
       this.req.page = val
       this.initProjectList()
     },

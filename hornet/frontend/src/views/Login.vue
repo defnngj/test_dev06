@@ -8,7 +8,6 @@
       <el-tabs
         v-model="activeName"
         type="border-card"
-        @tab-click="handleClick"
         class="login-window"
       >
         <el-tab-pane label="登录" name="first">
@@ -105,9 +104,6 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event)
-    },
 
     // 用户登录
     submitLogin(formName) {

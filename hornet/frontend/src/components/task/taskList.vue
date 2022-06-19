@@ -110,7 +110,6 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted11")
     this.initProjectList()
   },
 
@@ -144,10 +143,6 @@ export default {
       } else {
         this.$message.error("查询失败！")
       }
-    },
-
-    onSubmit() {
-      console.log("submit!")
     },
 
     createTask() {
