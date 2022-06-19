@@ -17,21 +17,21 @@
             </el-menu-item>
           </router-link>
           <router-link to="/main/case">
-            <el-menu-item index="1" class="menu-option">
+            <el-menu-item index="2" class="menu-option">
               <i class="el-icon-s-grid"></i>
               <template #title>用例管理</template>
             </el-menu-item>
           </router-link>
           <router-link to="/main/task">
-            <el-menu-item index="1" class="menu-option">
+            <el-menu-item index="3" class="menu-option">
               <i class="el-icon-s-order"></i>
               <template #title>任务管理</template>
             </el-menu-item>
           </router-link>
-          <router-link to="/main/about">
-            <el-menu-item index="1" class="menu-option">
-              <i class="el-icon-s-home"></i>
-              <template #title> About</template>
+          <router-link to="/main/report">
+            <el-menu-item index="4" class="menu-option">
+              <i class="el-icon-document-copy"></i>
+              <template #title>报告管理</template>
             </el-menu-item>
           </router-link>
         </el-menu>
@@ -62,6 +62,20 @@
 
 <script>
 export default {
+  computed: {
+    onRoutes() {
+      if (this.$route.path === '/main/project') {
+        return '1'
+      } else if (this.$route.path === '/main/case') {
+        return '2'
+      } else if (this.$route.path === '/main/task') {
+        return '3'
+      } else if (this.$route.path === '/main/report') {
+        return '5'
+      } 
+      return '1'
+    }
+  },
   data() {
     return {
       user: "",
