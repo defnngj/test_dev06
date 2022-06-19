@@ -141,12 +141,12 @@ export default {
 
     // 预览图片
     handlePreview(file, fileList) {
+      console.log(fileList)
       this.imageUrl = file.url
       this.imageVisible = true
     },
 
     beforeUpload(file) {
-
       let fd = new FormData()
       fd.append("file", file)
 

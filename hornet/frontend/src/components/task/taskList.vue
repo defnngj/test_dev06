@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <div style="text-align: left">
-      <el-form :inline="true" :model="projectForm" class="demo-form-inline">
+      <el-form :inline="true" :model="projectForm">
         <el-form-item label="项目">
-          <el-select v-model="projectForm.id" placeholder="请选择项目">
+          <el-select v-model="projectForm.id" size="medium" placeholder="请选择项目">
             <el-option
               v-for="item in projectOption"
               :key="item.value"
@@ -13,8 +13,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="createTask()">创建</el-button>
+        <el-form-item style="float: right">
+          <el-button type="primary" size="medium" @click="createTask()">创建任务</el-button>
         </el-form-item>
       </el-form>
     </div>

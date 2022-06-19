@@ -1,6 +1,24 @@
 <template>
   <div class="case">
-    <div style="height: 50px">
+    <div style="text-align: left">
+      <el-form :inline="true">
+        <el-form-item label="项目">
+          <el-select v-model="projectValue" size="medium" placeholder="请选择项目" @change="changeProject">
+            <el-option
+              v-for="item in projectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="float: right">
+          <el-button type="primary" size="medium" @click="createCase()">创建用例</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <!-- <div style="height: 50px">
       <span style="float: left">
         <p>项目:</p>
       </span>
@@ -25,7 +43,7 @@
           >创建</el-button
         >
       </span>
-    </div>
+    </div> -->
     <div style="margin-top: 10px">
       <el-card style="width: 28%; float: left">
         <el-button
