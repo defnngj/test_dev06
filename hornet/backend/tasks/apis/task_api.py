@@ -26,8 +26,11 @@ def get_task_list(request, filters: ProjectIn = Query(...)):
     获取项目列表
     auth=None 该接口不需要认证
     """
-    print("project_id-->", filters.project_id)
-    return TestTask.objects.filter(project_id=filters.project_id, is_delete=False).all()
+    task_list = TestTask.objects.filter(project_id=filters.project_id, is_delete=False).all()
+    for task in task_list:
+        relevance = TaskCaseRelevance.objects.get(task_id=task.id)
+        task.cases = json.loads(relevance.case)
+    return task_list
 
 
 @router.post("/", auth=None)

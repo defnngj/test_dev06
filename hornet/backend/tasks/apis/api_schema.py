@@ -11,11 +11,6 @@ class TaskIn(Schema):
     cases: list
 
 
-class TaskCaseRelevance(Schema):
-    id: int
-    case: str
-
-
 class TaskOut(Schema):
     id: int
     name: str
@@ -23,7 +18,7 @@ class TaskOut(Schema):
     describe: str = None
     create_time: Any
     update_time: Any
-    # task: TaskCaseRelevance = None
+    cases: List
 
 
 class ResultOut(Schema):
