@@ -17,46 +17,42 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item style="float: right">
-          <el-button type="primary" size="medium" @click="createTask()"
-            >创建任务</el-button
-          >
-        </el-form-item>
       </el-form>
     </div>
 
     <div>
-      <el-table :data="taskData" border style="width: 100%">
-        <el-table-column prop="id" label="ID" width="80"> </el-table-column>
+      <el-table :data="reportData" border style="width: 100%">
+        <el-table-column prop="id" label="ID"> </el-table-column>
         <el-table-column prop="name" label="名称"> </el-table-column>
-        <el-table-column prop="describe" label="描述"> </el-table-column>
-        <el-table-column prop="create_time" label="创建"> </el-table-column>
-        <el-table-column prop="update_time" label="更新"> </el-table-column>
-        <el-table-column prop="status" label="状态">
+        <el-table-column prop="tests" label="总数"> </el-table-column>
+        <el-table-column prop="passed" label="通过">
           <template slot-scope="scope">
-            <div v-if="scope.row.status === 0">
-              <el-tag type="info"> 未执行</el-tag>
-            </div>
-            <div v-else-if="scope.row.status === 1">
-              <el-tag type="success"> 执行中</el-tag>
-            </div>
-            <div v-else-if="scope.row.status === 2">
-              <el-tag> 已执行</el-tag>
-            </div>
-            <div v-else>
-              <el-tag type="danger"> 未知 </el-tag>
-            </div>
+            <el-tag type="success"> {{ scope.row.passed }}</el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="error" label="错误">
+          <template slot-scope="scope">
+            <el-tag type="danger"> {{ scope.row.error }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="failure" label="失败">
+          <template slot-scope="scope">
+            <el-tag type="warning"> {{ scope.row.failure }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="skipped" label="跳过">
+          <template slot-scope="scope">
+            <el-tag type="info"> {{ scope.row.skipped }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="run_time" label="时长"> </el-table-column>
+        <el-table-column prop="create_time" label="创建"> </el-table-column>
         <el-table-column fixed="right" label="操作" width="150">
           <template slot-scope="scope">
-            <el-button @click="runTask(scope.row)" type="text" size="small"
-              >执行</el-button
+            <el-button type="text" size="small" @click="showReport(scope.row)"
+              >查看</el-button
             >
-            <el-button type="text" size="small" @click="editTask(scope.row)"
-              >编辑</el-button
-            >
-            <el-button type="text" size="small" @click="deleteTask(scope.row)"
+            <el-button type="text" size="small" @click="deleteReport(scope.row)"
               >删除</el-button
             >
           </template>
@@ -75,26 +71,24 @@
     </div>
 
     <!-- 引入子组件 -->
-    <taskDialog
+    <reportDialog
       v-if="dialogFlag"
-      :title="dialogTitle"
-      :pid="projectForm.id"
-      :tid="taskId"
+      :rid="reportId"
       @cancel="closeDialog"
-    ></taskDialog>
+    ></reportDialog>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import taskDialog from "@/components/task/taskDialog.vue"
+import reportDialog from "@/components/report/reportDialog.vue"
 import ProjectApi from "../../request/project"
-import TaskApi from "../../request/task"
+import ReportApi from "../../request/report"
 
 export default {
   name: "Porject",
   components: {
-    taskDialog,
+    reportDialog,
   },
   data() {
     return {
@@ -103,28 +97,20 @@ export default {
       },
       projectOption: [],
       dialogFlag: false,
-      dialogTitle: "create",
       currentPorjectId: "",
-      taskId: "",
+      reportId: "",
       projectData: [],
       req: {
         page: 1,
         size: 6,
       },
       total: 50,
-      taskData: [],
+      reportData: [],
       taskHeartbeat: null,
     }
   },
   mounted() {
     this.initProjectList()
-    this.taskHeartbeat = setInterval(() => {
-      this.initTaskList()
-    }, 5000)
-  },
-  destroyed() {
-    // 销毁时候清除定时器
-    clearInterval(this.taskHeartbeat)
   },
   methods: {
     // 初始化项目列表
@@ -140,32 +126,26 @@ export default {
             label: resp.items[i].name,
           })
         }
-        this.initTaskList()
+        this.initReportList()
         // this.$message.success("查询成功！")
       } else {
         this.$message.error("查询失败！")
       }
     },
-    // 初始化任务列表
-    async initTaskList() {
+    // 初始化报告列表
+    async initReportList() {
       const req = { project_id: this.projectForm.id }
-      const resp = await TaskApi.getTaskList(req)
+      const resp = await ReportApi.getReportList(req)
       if (resp.success === true) {
-        this.taskData = resp.items
+        this.reportData = resp.items
         // this.$message.success("查询成功！")
       } else {
         this.$message.error("查询失败！")
       }
     },
 
-    createTask() {
-      this.dialogTitle = "create"
-      this.dialogFlag = true
-    },
-
-    editTask(row) {
-      this.dialogTitle = "edit"
-      this.taskId = row.id
+    showReport(row) {
+      this.reportId = row.id
       this.dialogFlag = true
     },
 
@@ -181,31 +161,14 @@ export default {
       this.initProjectList()
     },
 
-    showEdit(id) {
-      this.currentPorjectId = id
-      this.dialogTitle = "edit"
-      this.dialogFlag = true
-    },
-
-    // 删除项目
-    async deleteTask(row) {
-      const resp = await TaskApi.deleteTask(row.id)
+    // 删除报告
+    async deleteReport(row) {
+      const resp = await ReportApi.deleteReport(row.id)
       if (resp.success === true) {
         this.initProjectList()
         this.$message.success("删除成功！")
       } else {
         this.$message.error("删除失败！")
-      }
-    },
-
-    // 执行任务
-    async runTask(row) {
-      const resp = await TaskApi.runningTask(row.id)
-      if (resp.success === true) {
-        this.initProjectList()
-        this.$message.success("开始成功！")
-      } else {
-        this.$message.error("执行失败！")
       }
     },
   },

@@ -64,17 +64,17 @@
 export default {
   computed: {
     onRoutes() {
-      if (this.$route.path === '/main/project') {
-        return '1'
-      } else if (this.$route.path === '/main/case') {
-        return '2'
-      } else if (this.$route.path === '/main/task') {
-        return '3'
-      } else if (this.$route.path === '/main/report') {
-        return '5'
-      } 
-      return '1'
-    }
+      if (this.$route.path === "/main/project") {
+        return "1"
+      } else if (this.$route.path === "/main/case") {
+        return "2"
+      } else if (this.$route.path === "/main/task") {
+        return "3"
+      } else if (this.$route.path === "/main/report") {
+        return "4"
+      }
+      return "1"
+    },
   },
   data() {
     return {

@@ -3,7 +3,12 @@
     <div style="text-align: left">
       <el-form :inline="true">
         <el-form-item label="项目">
-          <el-select v-model="projectValue" size="medium" placeholder="请选择项目" @change="changeProject">
+          <el-select
+            v-model="projectValue"
+            size="medium"
+            placeholder="请选择项目"
+            @change="changeProject"
+          >
             <el-option
               v-for="item in projectOption"
               :key="item.value"
@@ -14,7 +19,9 @@
           </el-select>
         </el-form-item>
         <el-form-item style="float: right">
-          <el-button type="primary" size="medium" @click="createCase()">创建用例</el-button>
+          <el-button type="primary" size="medium" @click="createCase()"
+            >创建用例</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -74,7 +81,7 @@
       <el-drawer
         :title="caseTitle"
         :visible.sync="drawer"
-        direction="ltr"
+        direction="rtl"
         size="50%"
       >
         <CaseDialog

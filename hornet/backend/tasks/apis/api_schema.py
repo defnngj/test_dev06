@@ -23,6 +23,7 @@ class TaskOut(Schema):
 
 class ResultOut(Schema):
     """测试报告返回"""
+    id: int
     name: str
     passed: int
     error: int
