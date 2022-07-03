@@ -89,6 +89,47 @@
           </div>
         </el-collapse-item>
       </el-collapse>
+      <el-collapse>
+        <el-collapse-item title="提取器" name="2">
+          <el-form label-width="60px">
+            <div v-for="(item, index) in extractList" :key="index">
+              <el-form-item label="提取器">
+                <el-col :span="8">
+                  <el-input
+                    v-model="item.name"
+                    placeholder="变量"
+                    style="width: 100px"
+                  ></el-input>
+                </el-col>
+                <el-col class="line" :span="2">-</el-col>
+                <el-col :span="11">
+                  <el-input
+                    v-model="item.value"
+                    placeholder="提取规则"
+                    style="width: 100%"
+                  ></el-input>
+                </el-col>
+              </el-form-item>
+            </div>
+          </el-form>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-plus"
+            @click="addExtract"
+            plain
+            >添加</el-button
+          >
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-document-checked"
+            @click="checkExtract"
+            plain
+            >检查</el-button
+          >
+        </el-collapse-item>
+      </el-collapse>
     </div>
     <div style="height: 50px">
       <el-input
@@ -155,6 +196,7 @@ export default {
         assert_type: "include",
         assert_text: "",
       },
+      extractList: [],
     }
   },
 
@@ -176,6 +218,7 @@ export default {
         const params_body = resp.item.params_body.replace(/'/g, '"')
         this.caseForm.header = JSON.parse(header)
         this.caseForm.params_body = JSON.parse(params_body)
+        this.extractList = resp.item.extract_list
       } else {
         this.$message.error(resp.error.msg)
       }
@@ -212,13 +255,49 @@ export default {
       }
     },
 
-    // 保存用例
-    async saveClick() {
-      const resp = await CaseApi.createCase(this.caseForm)
+    // 添加提取器
+    addExtract() {
+      this.extractList.push({ name: "", value: "" })
+    },
+
+    // 检查提取器
+    async checkExtract() {
+      console.log("检查", this.extractList.length)
+      if (this.extractList.length === 0) {
+        this.$message.error("请添加提取器")
+        return
+      }
+      const req = {
+        response: this.caseForm.response,
+        extractList: this.extractList,
+      }
+
+      const resp = await CaseApi.checkExtract(req)
       if (resp.success === true) {
-        this.$message.success("保存成功")
+        this.$message.success("提取器校验成功")
       } else {
         this.$message.error(resp.error.msg)
+      }
+    },
+
+    // 保存用例
+    async saveClick() {
+      this.caseForm.extract_list = this.extractList
+      console.log("req-->", this.caseForm)
+      if (this.cid === 0) {
+        const resp = await CaseApi.createCase(this.caseForm)
+        if (resp.success === true) {
+          this.$message.success("保存成功")
+        } else {
+          this.$message.error(resp.error.msg)
+        }
+      } else {
+        const resp = await CaseApi.updateCase(this.cid, this.caseForm)
+        if (resp.success === true) {
+          this.$message.success("保存成功")
+        } else {
+          this.$message.error(resp.error.msg)
+        }
       }
     },
   },

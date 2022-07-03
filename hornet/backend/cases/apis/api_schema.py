@@ -56,6 +56,7 @@ class CaseIn(Schema):
     response: str
     assert_type: AssertType
     assert_text: str
+    extract_list: list = None
 
 
 class CaseDebugIn(Schema):
@@ -89,6 +90,11 @@ class CaseOut(Schema):
     create_time: Any
     update_time: Any
 
+
+class checkExtractIn(Schema):
+    """提取器入参"""
+    response: str
+    extractList: list
 
 
 

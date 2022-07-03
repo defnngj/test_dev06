@@ -28,6 +28,7 @@ class Error:
     CASE_ASSERT_ERROR = {"10054": "断言类型错误"}
     CASE_DELETE_ERROR = {"10055": "用例已被删除"}
     CASE_NOT_EXIST = {"10056": "用例不存在"}
+    CASE_EXTRACT_ERROR = {"10057": "提取器错误"}
 
     TASK_DELETE_ERROR = {"10061": "任务已被删除"}
 

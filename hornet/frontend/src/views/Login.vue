@@ -5,11 +5,7 @@
         <h2>接口测试平台</h2>
         <p>用于教学，包含项目管理、模块用例管理、任务执行、测试报告等功能</p>
       </div>
-      <el-tabs
-        v-model="activeName"
-        type="border-card"
-        class="login-window"
-      >
+      <el-tabs v-model="activeName" type="border-card" class="login-window">
         <el-tab-pane label="登录" name="first">
           <el-form
             :model="loginForm"
@@ -19,16 +15,24 @@
             label-width="100px"
           >
             <el-form-item label="用户" prop="username">
-              <el-input v-model="loginForm.username"></el-input>
+              <el-input
+                v-model="loginForm.username"
+                cy-data="LoginUsername"
+              ></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input v-model="loginForm.password" type="password"></el-input>
+              <el-input
+                v-model="loginForm.password"
+                type="password"
+                cy-data="LoginPassword"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
                 type="primary"
                 @click="submitLogin('loginForm')"
                 style="width: 270px"
+                cy-data="loginButton"
                 >登录</el-button
               >
             </el-form-item>
@@ -43,12 +47,16 @@
             label-width="100px"
           >
             <el-form-item label="用户" prop="username">
-              <el-input v-model="registerForm.username"></el-input>
+              <el-input
+                v-model="registerForm.username"
+                cy-data="username"
+              ></el-input>
             </el-form-item>
             <el-form-item label="设置密码" prop="password">
               <el-input
                 v-model="registerForm.password"
                 type="password"
+                cy-data="password"
               ></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="confirm_password">
@@ -104,7 +112,6 @@ export default {
     }
   },
   methods: {
-
     // 用户登录
     submitLogin(formName) {
       this.$refs[formName].validate((valid) => {

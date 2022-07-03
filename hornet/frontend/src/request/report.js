@@ -1,7 +1,6 @@
 import request from "@/HttpCommon.js"
 
 class ReportApi {
-
   getReportList(data) {
     return request.get("/api/reports/list", data)
   }

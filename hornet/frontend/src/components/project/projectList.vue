@@ -1,11 +1,13 @@
 <template>
   <div class="home">
     <div style="height: 50px; text-align: left; width: 100%">
-      <el-button type="primary" @click="showDialog()">创建</el-button>
+      <el-button type="primary" @click="showDialog()" cy-data="ProjectCreate"
+        >创建</el-button
+      >
     </div>
 
     <div style="height: 700px">
-      <div v-for="(item, index) in projectData" :key="index" class="text item">
+      <div v-for="(item, index) in projectData" :key="index">
         <el-col :span="7" class="project-card">
           <el-card style="width: 300px">
             <div slot="header" class="clearfix">
@@ -13,16 +15,22 @@
               <div style="float: right">
                 <el-dropdown>
                   <span class="el-dropdown-link">
-                    <i class="el-icon-setting"></i>
+                    <i class="el-icon-setting" cy-data="ProjectSetting"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                      <el-button type="text" @click="showEdit(item.id)"
+                      <el-button
+                        type="text"
+                        @click="showEdit(item.id)"
+                        cy-data="ProjectEdit"
                         >编辑</el-button
                       >
                     </el-dropdown-item>
                     <el-dropdown-item>
-                      <el-button type="text" @click="deleteProject(item.id)"
+                      <el-button
+                        type="text"
+                        @click="deleteProject(item.id)"
+                        cy-data="ProjectDelete"
                         >删除</el-button
                       >
                     </el-dropdown-item>
@@ -42,6 +50,7 @@
     </div>
     <div style="width: 100%; text-align: right">
       <el-pagination
+        cy-data="ProjectPagination"
         background
         @current-change="handleCurrentChange"
         layout="prev, pager, next"

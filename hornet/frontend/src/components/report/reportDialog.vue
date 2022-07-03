@@ -13,11 +13,12 @@
       class="demo-ruleForm"
     >
       <el-form-item label="统计">
-        <div id="youChart" :style="{width: '380px', height: '380px'}" style="margin: 0 auto;"></div>
-        <el-table
-          :data="reportData"
-          border
-          style="width: 100%">
+        <div
+          id="youChart"
+          :style="{ width: '380px', height: '380px' }"
+          style="margin: 0 auto"
+        ></div>
+        <el-table :data="reportData" border style="width: 100%">
           <el-table-column prop="name" label="名称"> </el-table-column>
           <el-table-column prop="tests" label="总数"> </el-table-column>
           <el-table-column prop="passed" label="通过"> </el-table-column>
@@ -25,7 +26,8 @@
           <el-table-column prop="error" label="错误"> </el-table-column>
           <el-table-column prop="skipped" label="跳过"> </el-table-column>
           <el-table-column prop="run_time" label="时长"> </el-table-column>
-          <el-table-column prop="create_time" label="创建时间"> </el-table-column>
+          <el-table-column prop="create_time" label="创建时间">
+          </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item label="详细日志">
@@ -57,7 +59,7 @@ export default {
     return {
       showTitle: "查看报告",
       dialogVisible: true,
-      detailLog: '',
+      detailLog: "",
       reportData: [],
       chartOption: {
         tooltip: {
@@ -109,11 +111,23 @@ export default {
       if (resp.success === true) {
         console.log("resp--->", resp.item)
         console.log("option--->", this.chartOption.series[0].data)
-        this.reportData.push(resp.item) 
-        this.chartOption.series[0].data.push({ value: resp.item.skipped, name: "跳过" })
-        this.chartOption.series[0].data.push({ value: resp.item.passed, name: "通过" })
-        this.chartOption.series[0].data.push({ value: resp.item.failure, name: "失败" })
-        this.chartOption.series[0].data.push({ value: resp.item.error, name: "错误" })
+        this.reportData.push(resp.item)
+        this.chartOption.series[0].data.push({
+          value: resp.item.skipped,
+          name: "跳过",
+        })
+        this.chartOption.series[0].data.push({
+          value: resp.item.passed,
+          name: "通过",
+        })
+        this.chartOption.series[0].data.push({
+          value: resp.item.failure,
+          name: "失败",
+        })
+        this.chartOption.series[0].data.push({
+          value: resp.item.error,
+          name: "错误",
+        })
         this.detailLog = resp.item.result
         // this.reportData = resp.item
         // this.$message.success("查询成功！")
