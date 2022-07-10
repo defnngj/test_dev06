@@ -6,48 +6,37 @@
       >
     </div>
 
-    <div style="height: 700px">
-      <div v-for="(item, index) in projectData" :key="index">
-        <el-col :span="7" class="project-card">
-          <el-card style="width: 300px">
-            <div slot="header" class="clearfix">
-              <span>{{ item.name }}</span>
-              <div style="float: right">
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                    <i class="el-icon-setting" cy-data="ProjectSetting"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>
-                      <el-button
-                        type="text"
-                        @click="showEdit(item.id)"
-                        cy-data="ProjectEdit"
-                        >编辑</el-button
-                      >
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                      <el-button
-                        type="text"
-                        @click="deleteProject(item.id)"
-                        cy-data="ProjectDelete"
-                        >删除</el-button
-                      >
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+    <el-card class="box-card" shadow="never">
+      <el-row>
+        <div v-for="(item, index) in projectData" :key="index">
+          <el-col :span="7" class="project-card">
+            <el-card class="box-card">
+              <el-avatar shape="square" :size="100" fit="fill" :src="item.image"></el-avatar>
+              <div slot="header" class="clearfix">
+                <span>【{{item.id}}】{{item.name}} </span>
+                <span style="float: right; padding: 3px 0">
+                  <el-dropdown style="left: 5px;">
+                    <i class="el-icon-setting" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item>
+                        <el-button cy-data="edit-project" @click="showEdit(item.id)" type="text" size="mini">编辑</el-button>
+                      </el-dropdown-item>
+                      <el-dropdown-item>
+                        <el-button cy-data="delete-project" @click="deleteProject(item.id)" type="text">删除</el-button>
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </span>
               </div>
-            </div>
-            <!-- {{ item.image }} -->
-            <img
-              :src="item.image"
-              class="image"
-              style="height: 235px; width: 235px"
-            />
-          </el-card>
-        </el-col>
-      </div>
-    </div>
+              <div>
+                {{item.describe}}
+              </div>
+            </el-card>
+          </el-col>
+        </div>
+      </el-row>
+    </el-card>
+
     <div style="width: 100%; text-align: right">
       <el-pagination
         cy-data="ProjectPagination"
@@ -149,3 +138,22 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.filter-line {
+  height: 50px;
+  text-align: left;
+}
+.foot-page {
+  margin-top: 20px;
+    float: right;
+    margin-bottom: 20px;
+}
+.project-card {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px
+}
+
+</style>
