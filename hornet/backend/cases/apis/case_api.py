@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from backend.common import response, Error, model_to_dict
 from cases.models import TestCase, Module, TestExtract
 from cases.apis.api_schema import CaseIn, CaseDebugIn, CaseAssertIn, CaseOut, checkExtractIn
+from cases.apis.common import get_replace_string
 
 router = Router(tags=["cases"])
 
@@ -34,7 +35,8 @@ def create_case(request, data: CaseIn):
     for extract in data.extract_list:
         if extract["name"] == "" or extract["value"] == "":
             continue
-        extract_obj = TestExtract.objects.filter(project_id=module.project_id, name=extract["name"])
+        extract_obj = TestExtract.objects.filter(
+            project_id=module.project_id, name=extract["name"])
         if len(extract_obj) > 0:
             extract_obj.extract = extract["value"]
         else:
@@ -62,7 +64,8 @@ def update_case(request, case_id: int,  payload: CaseIn):
     for extract in payload.extract_list:
         if extract["name"] == "" or extract["value"] == "":
             continue
-        extract_obj = TestExtract.objects.filter(project_id=module.project_id, name=extract["name"])
+        extract_obj = TestExtract.objects.filter(
+            project_id=module.project_id, name=extract["name"])
         if len(extract_obj) > 0:
             extract_obj.extract = extract["value"]
         else:
@@ -125,31 +128,48 @@ def debug_case(request, data: CaseDebugIn):
     header = json.loads(header)
     params_body = json.loads(params_body)
 
+    url = get_replace_string(url)
+
+    header_new = {}
+    for key, value in header.items():
+        header_new[key] = get_replace_string(value)
+
+    params_body_new = {}
+    for key, value in params_body.items():
+        params_body_new[key] = get_replace_string(value)
+
     resp = ""
     if method == "get":
-        resp = requests.get(url, headers=header, params=params_body).text
+        resp = requests.get(url, headers=header_new,
+                            params=params_body_new).text
 
     if method == "post":
         if params_type == "form":
-            resp = requests.post(url, headers=header, data=params_body).text
+            resp = requests.post(url, headers=header_new,
+                                 data=params_body_new).text
         elif params_type == "json":
-            resp = requests.post(url, headers=header, json=params_body).text
+            resp = requests.post(url, headers=header_new,
+                                 json=params_body_new).text
         else:
             return response(error=Error.CASE_PARAMS_ERROR)
 
     if method == "put":
         if params_type == "form":
-            resp = requests.put(url, headers=header, data=params_body).text
+            resp = requests.put(url, headers=header_new,
+                                data=params_body_new).text
         elif params_type == "json":
-            resp = requests.put(url, headers=header, json=params_body).text
+            resp = requests.put(url, headers=header_new,
+                                json=params_body_new).text
         else:
             return response(error=Error.CASE_PARAMS_ERROR)
 
     if method == "delete":
         if params_type == "form":
-            resp = requests.delete(url, headers=header, data=params_body).text
+            resp = requests.delete(
+                url, headers=header_new, data=params_body_new).text
         elif params_type == "json":
-            resp = requests.delete(url, headers=header, json=params_body).text
+            resp = requests.delete(
+                url, headers=header_new, json=params_body_new).text
         else:
             return response(error=Error.CASE_PARAMS_ERROR)
 

@@ -33,6 +33,7 @@ def running(task_id):
             header_dict = json.loads(header)
             params_body_dict = json.loads(params_body)
             test_case[case.name] = {
+                "case_id": case.id,
                 "url": case.url,
                 "method": case.method,
                 "header": header_dict,
