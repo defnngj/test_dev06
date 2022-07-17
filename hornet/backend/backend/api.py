@@ -5,6 +5,7 @@ from users.api import router as users_router
 from projects.api import router as projects_router
 from cases.apis.module_api import router as modules_router
 from cases.apis.case_api import router as cases_router
+from cases.apis.extract_api import router as extracts_router
 from tasks.apis.task_api import router as tasks_router
 from tasks.apis.report_api import router as reports_router
 
@@ -25,12 +26,12 @@ class GlobalAuth(HttpBearer):
         自动定义认证token处理
         """
         try:
-           session = Session.objects.get(pk=token)
-           # # 有效时间
-           # SESSION_COOKIE_AGE
-           # # 当前时间
-           # datetime
-           # # token/session 创建时间 2022-1-1：12：00：00
+            session = Session.objects.get(pk=token)
+            # # 有效时间
+            # SESSION_COOKIE_AGE
+            # # 当前时间
+            # datetime
+            # # token/session 创建时间 2022-1-1：12：00：00
         except Session.DoesNotExist:
             raise InvalidToken
         else:
@@ -70,21 +71,5 @@ api.add_router("/tasks/", tasks_router)
 # tags cases  URI: api/reports/xxx
 api.add_router("/reports/", reports_router)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# tags cases  URI: api/extracts/xxx
+api.add_router("/extracts/", extracts_router)

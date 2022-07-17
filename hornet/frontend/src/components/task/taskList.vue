@@ -53,6 +53,9 @@
             <el-button @click="runTask(scope.row)" type="text" size="small"
               >执行</el-button
             >
+            <el-button @click="showCase(scope.row)" type="text" size="small"
+              >顺序</el-button
+            >
             <el-button type="text" size="small" @click="editTask(scope.row)"
               >编辑</el-button
             >
@@ -82,12 +85,20 @@
       :tid="taskId"
       @cancel="closeDialog"
     ></taskDialog>
+    <taskCase
+      v-if="caseFlag"
+      :pid="projectForm.id"
+      :tid="taskId"
+      @cancel="closeDialog"
+    >
+    </taskCase>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import taskDialog from "@/components/task/taskDialog.vue"
+import taskCase from "@/components/task/taskCase.vue"
 import ProjectApi from "../../request/project"
 import TaskApi from "../../request/task"
 
@@ -95,6 +106,7 @@ export default {
   name: "Porject",
   components: {
     taskDialog,
+    taskCase,
   },
   data() {
     return {
@@ -114,6 +126,7 @@ export default {
       total: 50,
       taskData: [],
       taskHeartbeat: null,
+      caseFlag: false,
     }
   },
   mounted() {
@@ -169,8 +182,14 @@ export default {
       this.dialogFlag = true
     },
 
+    showCase(row) {
+      this.taskId = row.id
+      this.caseFlag = true
+    },
+
     closeDialog() {
       this.dialogFlag = false
+      this.caseFlag = false
       // this.initProjectList()
     },
 

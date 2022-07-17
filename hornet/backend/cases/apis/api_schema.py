@@ -97,14 +97,12 @@ class checkExtractIn(Schema):
     extractList: list
 
 
-
-
-
-
-
-
-
-
-
-
-
+class ExtractOut(Schema):
+    """测试报告返回"""
+    id: int
+    name: str
+    extract: str
+    vlue: str
+    case_id: str
+    create_time: Any
+    update_time: Any

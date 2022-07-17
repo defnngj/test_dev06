@@ -34,6 +34,12 @@
               <template #title>报告管理</template>
             </el-menu-item>
           </router-link>
+          <router-link to="/main/extract">
+            <el-menu-item index="5" class="menu-option">
+              <i class="el-icon-s-operation"></i>
+              <template #title>变量管理</template>
+            </el-menu-item>
+          </router-link>
         </el-menu>
       </el-aside>
 
@@ -72,6 +78,8 @@ export default {
         return "3"
       } else if (this.$route.path === "/main/report") {
         return "4"
+      } else if (this.$route.path === "/main/extract") {
+        return "5"
       }
       return "1"
     },

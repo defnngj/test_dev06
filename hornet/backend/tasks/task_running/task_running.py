@@ -17,11 +17,8 @@ def running(task_id):
     print("1. 读取测试用例")
     time.sleep(10)
     relevance = TaskCaseRelevance.objects.get(task_id=task_id)
-    relevance_list = json.loads(relevance.case)
+    case_ids = json.loads(relevance.case_list)
     # [{"moduleId": 1, "casesId": [1, 2, 3]}, {"moduleId": 6, "casesId": [5, 6]}]
-    case_ids = []
-    for rel in relevance_list:
-        case_ids = case_ids + rel["casesId"]
 
     test_case = {}
     for cid in case_ids:

@@ -9,12 +9,20 @@ class TaskApi {
     return request.get("/api/tasks/list", data)
   }
 
+  getTaskCaseList(tid) {
+    return request.get("/api/tasks/" + tid + "/caseList")
+  }
+
   getTaskDetail(tid) {
     return request.get("/api/tasks/" + tid + "/")
   }
 
   updateTask(tid, data) {
     return request.put("/api/tasks/" + tid + "/", data)
+  }
+
+  updataTaskCaseList(tid, data) {
+    return request.put("/api/tasks/" + tid + "/caseList", data)
   }
 
   deleteTask(tid) {

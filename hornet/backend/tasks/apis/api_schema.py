@@ -33,3 +33,7 @@ class ResultOut(Schema):
     run_time: float
     result: str
     create_time: Any
+
+
+class CaseListIn(Schema):
+    caseList: list

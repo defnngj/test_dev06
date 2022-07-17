@@ -10,7 +10,7 @@ from backend.pagination import CustomPagination
 from backend.common import response, Error, model_to_dict
 from projects.models import Project
 from tasks.models import TestTask, TaskCaseRelevance, TestResult
-from tasks.apis.api_schema import TaskIn, ResultOut, TaskOut
+from tasks.apis.api_schema import TaskIn, ResultOut, TaskOut, CaseListIn
 from tasks.task_running.task_running import run2
 from cases.models import TestCase
 from cases.apis.api_schema import ProjectIn
@@ -43,10 +43,19 @@ def create_task(request, data: TaskIn):
     task = TestTask.objects.create(project=project, name=data.name, describe=data.describe)
     cases = []
     cases_json = json.dumps(data.cases)
-    TaskCaseRelevance.objects.create(task_id=task.id, case=cases_json)
+    case_list = []
+    for c in data.cases:
+        case_list = case_list + c["casesId"]
+    case_list_json = json.dumps(case_list)
+
+    TaskCaseRelevance.objects.create(
+        task_id=task.id,
+        case=cases_json,
+        case_list=case_list_json
+    )
+
     task_dict = model_to_dict(task)
     task_dict["cases"] = cases
-
     return response(item=task_dict)
 
 
@@ -82,6 +91,37 @@ def get_task_detail(request, task_id: int):
     return response(item=task_dict)
 
 
+@router.get("/{task_id}/caseList", auth=None)
+def get_task_case_list(request, task_id: int):
+    """
+    获取任务详情
+    auth=None 该接口不需要认证
+    """
+    relevance = get_object_or_404(TaskCaseRelevance, task_id=task_id)
+
+    cases_list = json.loads(relevance.case_list)
+    cases_info = []
+    for case in cases_list:
+        case_obj = TestCase.objects.get(id=case)
+        cases_info.append(model_to_dict(case_obj))
+
+    return response(item=cases_info)
+
+
+@router.put("/{task_id}/caseList", auth=None)
+def get_task_case_list(request, task_id: int, data: CaseListIn):
+    """
+    获取任务详情
+    auth=None 该接口不需要认证
+    """
+    print("task id", task_id)
+    print("save case list", data.caseList)
+    relevance = get_object_or_404(TaskCaseRelevance, task_id=task_id)
+    relevance.case_list = json.dumps(data.caseList)
+    relevance.save()
+    return response(item=[])
+
+
 @router.put("/{task_id}/", auth=None)
 def update_task(request, task_id: int,  data: TaskIn):
     """
@@ -94,8 +134,13 @@ def update_task(request, task_id: int,  data: TaskIn):
     task.describe = data.describe
     task.save()
 
+    case_list = []
+    for case in data.cases:
+        case_list = case_list + case["casesId"]
+
     relevance = TaskCaseRelevance.objects.get(task_id=task.id)
     relevance.case = json.dumps(data.cases)
+    relevance.case_list = json.dumps(case_list)
     relevance.save()
 
     task_dict = model_to_dict(task)
