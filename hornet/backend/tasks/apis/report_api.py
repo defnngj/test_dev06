@@ -22,7 +22,7 @@ def get_report_list(request, filters: ProjectIn = Query(...)):
     auth=None 该接口不需要认证
     """
     tasks = TestTask.objects.filter(
-        project_id=filters.project_id, is_delete=False).all()
+        project_id=filters.project_id, is_delete=False).all().order_by("-create_time")
     report_list = []
     for task in tasks:
         print("task id=>", task.id)
