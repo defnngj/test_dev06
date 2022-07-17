@@ -9,7 +9,7 @@ from ddt import ddt, data, file_data, idata, unpack
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
-from cases.apis.common import get_replace_string, update_extract_vlue, query_extract_vlue
+from cases.apis.common import get_replace_string, update_extract_value, query_extract_value
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -65,7 +65,7 @@ class MyTest(unittest.TestCase):
 
         # 提取变量
         # extracts = TestExtract.objects.filter(case_id=case_id)
-        extracts = query_extract_vlue(case_id)
+        extracts = query_extract_value(case_id)
 
         if len(extracts) > 0:
 
@@ -75,7 +75,7 @@ class MyTest(unittest.TestCase):
                 if result is None:
                     raise ValueError(f"提取器错误: {extract_obj[2]}")
                 else:
-                    update_extract_vlue(case_id, extract_obj[1], result)
+                    update_extract_value(case_id, extract_obj[1], result)
 
 
 if __name__ == '__main__':

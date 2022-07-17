@@ -25,7 +25,7 @@
         <el-table-column prop="id" label="ID"> </el-table-column>
         <el-table-column prop="name" label="名称"> </el-table-column>
         <el-table-column prop="extract" label="提取规则"> </el-table-column>
-        <el-table-column prop="vlue" label="值"> </el-table-column>
+        <el-table-column prop="value" label="值"> </el-table-column>
         <el-table-column prop="create_time" label="创建"> </el-table-column>
         <el-table-column prop="update_time" label="更新"> </el-table-column>
         <el-table-column fixed="right" label="操作" width="150">

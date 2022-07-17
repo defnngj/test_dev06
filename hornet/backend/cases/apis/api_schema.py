@@ -102,7 +102,7 @@ class ExtractOut(Schema):
     id: int
     name: str
     extract: str
-    vlue: str
+    value: str
     case_id: str
     create_time: Any
     update_time: Any

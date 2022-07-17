@@ -40,7 +40,7 @@ def get_replace_string(s):
         return s
 
 
-def query_extract_vlue(case_id):
+def query_extract_value(case_id):
     """
     查询提取器变量
     """
@@ -52,12 +52,12 @@ def query_extract_vlue(case_id):
     return extracts
 
 
-def update_extract_vlue(case_id, name, value):
+def update_extract_value(case_id, name, value):
     """
     更新提取器变量
     """
     conn = sqlite3.connect(db_sqlit3)
     cursor = conn.cursor()
-    sql = f"""UPDATE cases_testextract SET vlue='{value}' WHERE case_id={case_id} AND name="{name}";"""
+    sql = f"""UPDATE cases_testextract SET value='{value}' WHERE case_id={case_id} AND name="{name}";"""
     cursor.execute(sql)
     conn.commit()

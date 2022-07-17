@@ -47,7 +47,7 @@ class TestExtract(models.Model):
     case_id = models.IntegerField("用例ID", null=False, default=0)
     name = models.CharField("名称", max_length=50, null=False)
     extract = models.CharField("提取规则", max_length=200, null=False)
-    vlue = models.CharField("提取值", max_length=200, null=True, default="")
+    value = models.CharField("提取值", max_length=200, null=True, default="")
     create_time = models.DateTimeField("创建时间", auto_now_add=True)
     update_time = models.DateTimeField("更新时间", auto_now=True)
 
