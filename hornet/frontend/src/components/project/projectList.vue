@@ -11,25 +11,41 @@
         <div v-for="(item, index) in projectData" :key="index">
           <el-col :span="7" class="project-card">
             <el-card class="box-card">
-              <el-avatar shape="square" :size="100" fit="fill" :src="item.image"></el-avatar>
+              <el-avatar
+                shape="square"
+                :size="100"
+                fit="fill"
+                :src="item.image"
+              ></el-avatar>
               <div slot="header" class="clearfix">
-                <span>【{{item.id}}】{{item.name}} </span>
+                <span>【{{ item.id }}】{{ item.name }} </span>
                 <span style="float: right; padding: 3px 0">
-                  <el-dropdown style="left: 5px;">
+                  <el-dropdown style="left: 5px">
                     <i class="el-icon-setting" style="margin-right: 15px"></i>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>
-                        <el-button cy-data="edit-project" @click="showEdit(item.id)" type="text" size="mini">编辑</el-button>
+                        <el-button
+                          cy-data="edit-project"
+                          @click="showEdit(item.id)"
+                          type="text"
+                          size="mini"
+                          >编辑</el-button
+                        >
                       </el-dropdown-item>
                       <el-dropdown-item>
-                        <el-button cy-data="delete-project" @click="deleteProject(item.id)" type="text">删除</el-button>
+                        <el-button
+                          cy-data="delete-project"
+                          @click="deleteProject(item.id)"
+                          type="text"
+                          >删除</el-button
+                        >
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </span>
               </div>
               <div>
-                {{item.describe}}
+                {{ item.describe }}
               </div>
             </el-card>
           </el-col>
@@ -146,14 +162,13 @@ export default {
 }
 .foot-page {
   margin-top: 20px;
-    float: right;
-    margin-bottom: 20px;
+  float: right;
+  margin-bottom: 20px;
 }
 .project-card {
   margin-left: 15px;
   margin-right: 15px;
   margin-top: 15px;
-  margin-bottom: 15px
+  margin-bottom: 15px;
 }
-
 </style>
