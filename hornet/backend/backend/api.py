@@ -8,6 +8,7 @@ from cases.apis.case_api import router as cases_router
 from cases.apis.extract_api import router as extracts_router
 from tasks.apis.task_api import router as tasks_router
 from tasks.apis.report_api import router as reports_router
+from performance.api import router as performance_router
 
 
 class InvalidToken(Exception):
@@ -73,3 +74,6 @@ api.add_router("/reports/", reports_router)
 
 # tags cases  URI: api/extracts/xxx
 api.add_router("/extracts/", extracts_router)
+
+# tags cases  URI: api/performance/xxx
+api.add_router("/performance/", performance_router)

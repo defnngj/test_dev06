@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'users',
     'projects',
     'cases',
     'tasks',
+    'performance'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +139,38 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+
+ASGI_APPLICATION = 'backend.routing.application'
+
+# 设置通道层的通信后台 - 本地测试用
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+
+# 生产环境中使用redis做后台，安装channels_redis
+CHANNEL_LAYERS = {
+    "default": {
+     "BACKEND": "channels_redis.core.RedisChannelLayer",
+     "CONFIG": {
+         "hosts": [("127.0.0.1", 6379)],
+          #或"hosts": [os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1')],
+     },
+    },
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
