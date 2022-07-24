@@ -40,6 +40,12 @@
               <template #title>变量管理</template>
             </el-menu-item>
           </router-link>
+          <router-link to="/main/performance">
+            <el-menu-item index="6" class="menu-option">
+              <i class="el-icon-odometer"></i>
+              <template #title>性能管理</template>
+            </el-menu-item>
+          </router-link>
         </el-menu>
       </el-aside>
 
@@ -79,6 +85,8 @@ export default {
       } else if (this.$route.path === "/main/report") {
         return "4"
       } else if (this.$route.path === "/main/extract") {
+        return "5"
+      } else if (this.$route.path === "/main/performance") {
         return "5"
       }
       return "1"

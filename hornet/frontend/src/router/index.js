@@ -8,6 +8,7 @@ import caseModule from "../components/case/caseModule.vue"
 import taskList from "../components/task/taskList.vue"
 import reportList from "../components/report/reportList.vue"
 import extractList from "../components/extract/extractList.vue"
+import performance from "../components/performance/performance.vue"
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,10 @@ const routes = [
       {
         path: "extract",
         component: extractList,
+      },
+      {
+        path: "performance",
+        component: performance,
       },
       {
         path: "about",
