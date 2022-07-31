@@ -10,6 +10,10 @@ class ProjectApi {
     return request.get("/api/projects/" + id + "/")
   }
 
+  getProjectCases(id) {
+    return request.get("/api/projects/" + id + "/cases")
+  }
+
   updateProject(id, data) {
     return request.put("/api/projects/" + id + "/", data)
   }

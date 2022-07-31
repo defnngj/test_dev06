@@ -22,12 +22,3 @@ def get_report_list(request, filters: ProjectIn = Query(...)):
     extract = TestExtract.objects.filter(project_id=filters.project_id).all()
 
     return extract
-
-
-
-
-
-
-
-
-

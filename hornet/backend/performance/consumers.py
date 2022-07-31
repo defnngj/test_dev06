@@ -1,5 +1,6 @@
 import json
 import time
+import math
 import psutil
 import httpx
 from asgiref.sync import async_to_sync
@@ -93,7 +94,7 @@ class CPUConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        print("接收 message", message)
+        print("cpu 接收 message", message)
 
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
@@ -105,13 +106,71 @@ class CPUConsumer(WebsocketConsumer):
 
     def cpu_background_thread(self, event):
         message = event['message']
-        print("msg 开始", message)
+        print("cpu msg 开始", message)
         count = 0
-        for i in range(20):
+        while True:
             count += 1
-            time.sleep(5)
+            time.sleep(2)
             t = time.strftime('%H:%M:%S', time.localtime())
             cpu = psutil.cpu_percent(interval=None, percpu=True)
             text = json.dumps({"message": {"data": [t, cpu], "count": count}})
             print("cpu-->", text)
             self.send(text_data=text)
+
+
+class MemoryConsumer(WebsocketConsumer):
+
+    # websocket建立连接时执行方法
+    def connect(self):
+        global cpu_thread
+        # 从url里获取聊天室名字，为每个房间建立一个频道组
+        self.group_name = f'memory_used'
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+        # 接受所有websocket请求
+        self.accept()
+
+    # websocket断开时执行方法
+    def disconnect(self, close_code):
+        print("断开连接")
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
+
+    # 从websocket接收到消息时执行函数
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+        print("memory 接收 message", message)
+
+        async_to_sync(self.channel_layer.group_send)(
+            self.group_name,
+            {
+                'type': 'memory_background_thread',
+                'message': message
+            }
+        )
+
+    def memory_background_thread(self, event):
+        message = event['message']
+        print("memory msg 开始", message)
+        count = 0
+        for i in range(10):
+            count += 1
+            time.sleep(2)
+            t = time.strftime('%H:%M:%S', time.localtime())
+            memory = psutil.virtual_memory()
+            print("memory-->", t, type(memory), memory)
+            used_mem = math.ceil(memory.used / (1024 * 1024))
+            percent_mem = memory.percent
+            print("t", t)
+            print("used_mem", used_mem)
+            print("count", count)
+            print("percent_mem", percent_mem)
+            text = json.dumps({"message": {"data": [str(t), str(used_mem)], "count": str(count), "percent": str(percent_mem)}})
+            self.send(text_data=text)
+
