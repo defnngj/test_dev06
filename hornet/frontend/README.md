@@ -7,12 +7,14 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run serve  # 本地
+npm run prod-serve  # 产线
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+npm run build  # 本地
+npm run prod-serve  # 产线
 ```
 
 ### Run your end-to-end tests

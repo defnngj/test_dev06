@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "local-serve": "vue-cli-service serve --mode local",
-    "local-build": "vue-cli-service build --mode local",
+    "serve": "vue-cli-service serve --mode local",
+    "build": "vue-cli-service build --mode local",
+    "local-serve": "vue-cli-service serve --mode prod",
+    "local-build": "vue-cli-service build --mode prod",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
